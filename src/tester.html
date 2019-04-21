@@ -1,0 +1,292 @@
+<html lang="en">
+
+<head>
+	<title>Ice Cream Simulation</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<style>
+		body {
+			font-family: Monospace;
+			margin: 0px;
+			overflow: hidden;
+		}
+		#info {
+			color: #fff;
+			position: absolute;
+			top: 10px;
+			width: 100%;
+			text-align: center;
+			z-index: 100;
+			display:block;
+		}
+		#info a {
+			color: #ff0080;
+			font-weight: bold;
+		}
+	</style>
+</head>
+
+<body>
+<div id="info">Ice Cream Simulation | Natalie Khamphanh, Lauren Martini, and Shirley Wang</div>
+
+<script src="../build/three.js"></script>
+<script src="js/loaders/OBJLoader.js"></script>
+<script src="js/WebGL.js"></script>
+<script src="js/libs/stats.min.js"></script>
+<script>
+
+
+// Base code = https://codepen.io/kaigth/
+
+// Setup Particles
+var particleSet = [],
+    particleCount = 200,
+    spreadMin = 0.01,
+    spreadMax = 0.08,
+    speed = 2, // higher means slower
+    timeToSlow = 0.8;
+
+var SW = window.innerWidth, SH = window.innerHeight;
+var scene = new THREE.Scene();
+
+var camera = new THREE.PerspectiveCamera(60, SW / SH, 0.1, 1000);
+    camera.position.z = 5;
+
+var renderer = new THREE.WebGLRenderer();
+renderer.setSize(SW, SH);
+document.body.appendChild(renderer.domElement);
+
+var count = 0;
+
+//light
+var light = new THREE.PointLight( 0x0000ff, 5, 100 );
+light.position.set(1, 1, 2);
+scene.add( light );
+
+//Objects
+function container() {
+  var geometry = new THREE.SphereGeometry( 1, 1 );
+  var material = new THREE.MeshBasicMaterial( { color: 0x00ffff, transparent: true } );
+  var container = new THREE.Mesh( geometry, material );
+  
+  return container;
+}
+
+function parts() {
+  var geometry = new THREE.SphereGeometry( 0.01, 0.01);
+  var material = new THREE.MeshBasicMaterial( { color: 0x00ffff, transparent: true } );
+  var particle = new THREE.Mesh( geometry, material );
+  
+  return particle;
+}
+
+function makeParts() {
+  var particles = parts()
+  
+  particles.position.x = 0;
+  particles.position.y = 0;
+  //particles.velocity = new THREE.Vector3( 0.01, 0.01, 0 );
+
+  scene.add( particles );
+  
+  particleSet.push( particles );
+  
+}
+
+function rRange(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+//Looping and Rendering
+function render(){
+  renderer.render(scene, camera);
+  requestAnimationFrame(render);
+  
+  if ( particleSet.length <= particleCount ) {
+      
+    makeParts();
+
+  }
+  
+  for ( var i = 0; i < particleSet.length; i++ ) {
+    var pArray = particleSet.indexOf( i );
+    
+    particleSet[i].material.opacity -= 0.008;
+    
+    if ( particleSet[i].material.opacity <= 0 ) {
+      
+       particleSet[i].position.x = 0;
+       particleSet[i].position.y = 0;
+       particleSet[i].material.opacity = 1
+       count += 1;
+    }
+
+    
+    particleSet[i].position.x += (0.002 + rRange( -spreadMin, spreadMax) / speed) * timeToSlow;
+    particleSet[i].position.y -= (0.002 + rRange( -spreadMin, spreadMax) / speed) * timeToSlow;
+    
+  }
+  
+}
+
+render();
+</script>
+</body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Ice Cream Simulation</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				font-family: Monospace;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				display:block;
+			}
+			#info a {
+				color: #ff0080;
+				font-weight: bold;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="info">
+			<a href="http://threejs.org" target="_blank" rel="noopener">three.js</a> - point lights WebGL demo.<br />
+			Walt Disney head by <a href="http://davidoreilly.com/post/18087489343/disneyhead" target="_blank" rel="noopener">David OReilly</a>
+
+			Ice Cream Simulation | Natalie Khamphanh, Lauren Martini, and Shirley Wang
+		</div>
+
+		<script src="../build/three.js"></script>
+		<script src="js/loaders/OBJLoader.js"></script>
+		<script src="js/WebGL.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>
+
+			if ( WEBGL.isWebGLAvailable() === false ) {
+
+				document.body.appendChild( WEBGL.getWebGLErrorMessage() );
+
+			}
+
+			var camera, scene, renderer,
+				light1, light2, light3, light4,
+				object, stats;
+
+			var clock = new THREE.Clock();
+
+			init();
+			animate();
+
+			function init() {
+
+				camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 1000 );
+				camera.position.z = 100;
+
+				scene = new THREE.Scene();
+
+				//model
+
+				// var loader = new THREE.OBJLoader();
+				// loader.load( 'models/obj/walt/WaltHead.obj', function ( obj ) {
+
+				// 	object = obj;
+				// 	object.scale.multiplyScalar( 0.8 );
+				// 	object.position.y = - 30;
+				// 	scene.add( object );
+
+				// } );
+
+				var sphere = new THREE.SphereBufferGeometry( 5, 16, 8 );
+
+				//lights
+
+				light1 = new THREE.PointLight( 0xff0040, 2, 50 );
+				light1.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xff0040 } ) ) );
+				scene.add( light1 );
+
+				light2 = new THREE.PointLight( 0x0040ff, 2, 50 );
+				light2.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x0040ff } ) ) );
+				scene.add( light2 );
+
+				light3 = new THREE.PointLight( 0x80ff80, 2, 50 );
+				light3.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x80ff80 } ) ) );
+				scene.add( light3 );
+
+				light4 = new THREE.PointLight( 0xffaa00, 2, 50 );
+				light4.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xffaa00 } ) ) );
+				scene.add( light4 );
+
+				//renderer
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+				render();
+				// stats.update();
+
+			}
+
+			function render() {
+
+				var time = Date.now() * 0.0005;
+				var delta = clock.getDelta();
+
+				if ( object ) object.rotation.y -= 0.5 * delta;
+
+				light1.position.x = Math.sin( time * 0.7 ) * 30;
+				light1.position.y = Math.cos( time * 0.5 ) * 40;
+				light1.position.z = Math.cos( time * 0.3 ) * 30;
+
+				light2.position.x = Math.cos( time * 0.3 ) * 30;
+				light2.position.y = Math.sin( time * 0.5 ) * 40;
+				light2.position.z = Math.sin( time * 0.7 ) * 30;
+
+				light3.position.x = Math.sin( time * 0.7 ) * 30;
+				light3.position.y = Math.cos( time * 0.3 ) * 40;
+				light3.position.z = Math.sin( time * 0.5 ) * 30;
+
+				light4.position.x = Math.sin( time * 0.3 ) * 30;
+				light4.position.y = Math.cos( time * 0.7 ) * 40;
+				light4.position.z = Math.sin( time * 0.5 ) * 30;
+
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+	</body>
+</html>
+ -->
