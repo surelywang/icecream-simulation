@@ -30,9 +30,7 @@
 <div id="info">Ice Cream Simulation | Natalie Khamphanh, Lauren Martini, and Shirley Wang</div>
 
 <script src="../build/three.js"></script>
-<script src="js/loaders/OBJLoader.js"></script>
 <script src="js/WebGL.js"></script>
-<script src="js/libs/stats.min.js"></script>
 <script>
 
 
@@ -56,9 +54,7 @@ var renderer = new THREE.WebGLRenderer();
 renderer.setSize(SW, SH);
 document.body.appendChild(renderer.domElement);
 
-var count = 0;
-
-//light
+// Add light to scene
 var light = new THREE.PointLight( 0x0000ff, 5, 100 );
 light.position.set(1, 1, 2);
 scene.add( light );
@@ -73,7 +69,7 @@ function container() {
 }
 
 function parts() {
-  var geometry = new THREE.SphereGeometry( 0.01, 0.01);
+  var geometry = new THREE.SphereGeometry( 0.05, 0.05);
   var material = new THREE.MeshBasicMaterial( { color: 0x00ffff, transparent: true } );
   var particle = new THREE.Mesh( geometry, material );
   
