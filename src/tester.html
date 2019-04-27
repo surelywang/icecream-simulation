@@ -33,31 +33,44 @@
 <script src="js/WebGL.js"></script>
 <script>
 
-
 // Base code = https://codepen.io/kaigth/
+// Reference 2 = https://codepen.io/kekkorider/pen/BRrgbY/
 
 // Setup Particles
 var particleSet = [],
     particleCount = 200,
     spreadMin = 0.01,
     spreadMax = 0.08,
-    speed = 2, // higher means slower
-    timeToSlow = 0.8;
+    speed = 200, // higher means slower
+    timeToSlow = 0.3;
 
 var SW = window.innerWidth, SH = window.innerHeight;
 var scene = new THREE.Scene();
 
-var camera = new THREE.PerspectiveCamera(60, SW / SH, 0.1, 1000);
+var camera, renderer, particle;
+
+
+init();
+render();
+
+function init() {
+
+	// Set camera
+	camera = new THREE.PerspectiveCamera(60, SW / SH, 0.1, 1000);
     camera.position.z = 5;
 
-var renderer = new THREE.WebGLRenderer();
-renderer.setSize(SW, SH);
-document.body.appendChild(renderer.domElement);
+    // Set renderer
+	renderer = new THREE.WebGLRenderer();
+	renderer.setSize(SW, SH);
+	document.body.appendChild(renderer.domElement);
 
-// Add light to scene
-var light = new THREE.PointLight( 0x0000ff, 5, 100 );
-light.position.set(1, 1, 2);
-scene.add( light );
+	// Add light to scene
+	var light = new THREE.DirectionalLight( 0xffffff );
+	light.position.set( 0, 1, 1 ).normalize();
+	light.castShadow = true;
+	scene.add( light );
+}
+
 
 //Objects
 function container() {
@@ -66,26 +79,34 @@ function container() {
   var container = new THREE.Mesh( geometry, material );
   
   return container;
+
 }
 
-function parts() {
-  var geometry = new THREE.SphereGeometry( 0.05, 0.05);
-  var material = new THREE.MeshBasicMaterial( { color: 0x00ffff, transparent: true } );
+// Creates a new particle
+function newParticle() {
+
+  var geometry = new THREE.SphereBufferGeometry( 0.1, 32, 32 );
+  var material = new THREE.MeshBasicMaterial( {
+  	color: 0xf3e5ab,
+  	transparent: true } );
   var particle = new THREE.Mesh( geometry, material );
-  
+  particle.castShadow = true;
   return particle;
+
 }
 
-function makeParts() {
-  var particles = parts()
-  
-  particles.position.x = 0;
-  particles.position.y = 0;
-  //particles.velocity = new THREE.Vector3( 0.01, 0.01, 0 );
+function makeParticles() {
+  var particle = newParticle();
 
-  scene.add( particles );
-  
-  particleSet.push( particles );
+  for ( var i = 0; i < 20; i++ ) {
+  	var particle = newParticle();
+  	particle.position.x = i*0.01;
+  	particle.position.y = 0;
+  	scene.add( particle );
+  	particleSet.push( particle );
+  }
+
+  //particles.velocity = new THREE.Vector3( 0.01, 0.01, 0 );
   
 }
 
@@ -93,39 +114,36 @@ function rRange(min, max) {
     return Math.random() * (max - min) + min;
 }
 
-//Looping and Rendering
-function render(){
-  renderer.render(scene, camera);
-  requestAnimationFrame(render);
+// Looping and Rendering
+function render() {
   
   if ( particleSet.length <= particleCount ) {
-      
-    makeParts();
-
+    makeParticles();
   }
-  
+
+
   for ( var i = 0; i < particleSet.length; i++ ) {
     var pArray = particleSet.indexOf( i );
     
-    particleSet[i].material.opacity -= 0.008;
+    particleSet[i].material.opacity -= 0.006;
     
-    if ( particleSet[i].material.opacity <= 0 ) {
+    if ( particleSet[i].material.opacity <= 0.000 ) {
       
-       particleSet[i].position.x = 0;
+       particleSet[i].position.x = i*0.001;
        particleSet[i].position.y = 0;
-       particleSet[i].material.opacity = 1
-       count += 1;
+       particleSet[i].material.opacity = 0.5;
+
     }
 
-    
-    particleSet[i].position.x += (0.002 + rRange( -spreadMin, spreadMax) / speed) * timeToSlow;
+    // particleSet[i].position.x += (0.002 + rRange( -spreadMin, spreadMax) / speed) * timeToSlow;
     particleSet[i].position.y -= (0.002 + rRange( -spreadMin, spreadMax) / speed) * timeToSlow;
-    
   }
+
+  renderer.render(scene, camera);
+  requestAnimationFrame(render);
   
 }
 
-render();
 </script>
 </body>
 </html>
