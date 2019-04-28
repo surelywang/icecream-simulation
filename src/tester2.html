@@ -29,6 +29,8 @@
 <body>
 <div id="info">Ice Cream Simulation | Natalie Khamphanh, Lauren Martini, and Shirley Wang</div>
 
+<script src="../build/three.js"></script>
+<script src="js/WebGL.js"></script>
 <script src="js/three.min.js"></script>
 <script src="js/lib/jquery-3.0.0.min.js"></script>
 <script src="js/lib/gs/TweenMax.min.js"></script>
@@ -45,10 +47,35 @@
 	var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 100 );
 	camera.position.z = 3;
 
+	// Add lightss to scene
+	var ambient = new THREE.AmbientLight(0xffffff);
+	var spot = new THREE.SpotLight( 0xFFFFFF );
+	var point = new THREE.DirectionalLight( 0xffffff );
+	spot.position.set( 1, 3, 5 );
+	spot.position.set( 0, 1, 1 ).normalize();
+	scene.add( spot );
+	scene.add( ambient );
+	scene.add( point );
+
+	//import textures for ice cream
+	var loader = new THREE.TextureLoader();
+	loader.crossOrigin = "";
+	var texture1 = loader.load('https://envato-shoebox-0.imgix.net/c4c9/3704-8a4d-4315-8997-69a5b832e534/DSC_9637.jpg?auto=compress%2Cformat&fit=max&mark=https%3A%2F%2Felements-assets.envato.com%2Fstatic%2Fwatermark2.png&markalign=center%2Cmiddle&markalpha=18&w=700&s=45fd8158a2ca535f0d006114df005daf');
+	var texture2 = loader.load('https://11907110f9dd2f4142e1-7ffe570da0ff54a0cf08d83fa799f23c.ssl.cf1.rackcdn.com/Food_B_0045.jpg');
+
+	//create sphere material
+	icemat = new THREE.MeshPhongMaterial({
+      map: texture1,
+      transparent: false,
+      bumpMap: texture2,
+      displacementMap: texture1,
+      displacementScale: 0.5
+    });
+
 	//create base sphere
 	var geometry = new THREE.SphereGeometry(0.2, 200, 200);
 	var material = new THREE.MeshNormalMaterial();
-	var mesh = new THREE.Mesh( geometry, material );
+	var mesh = new THREE.Mesh( geometry,icemat );
 	scene.add(mesh);
 	
 	var radius = 0.2;
