@@ -116,7 +116,7 @@ function init() {
       displacementScale: 0.1
     });
 
-    var cone_geo = new THREE.ConeGeometry(1, 3, 10);
+    var cone_geo = new THREE.ConeGeometry(0.7, 2.7, 10);
     var cone_mat = new THREE.MeshPhongMaterial({
       map: texture3,
       transparent: false,
@@ -124,8 +124,8 @@ function init() {
     });
     var cone = new THREE.Mesh(cone_geo, cone_mat);
     cone.scale.y = -1;
-    cone.position.y = -0.4;
-    scene.add(cone)
+    cone.position.y = -1;
+    scene.add(cone);
         
     var geometry = new THREE.SphereBufferGeometry(0.55, 32, 32);
     mesh = new THREE.Mesh(geometry, icemat);
