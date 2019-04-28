@@ -124,12 +124,12 @@ function init() {
     });
     var cone = new THREE.Mesh(cone_geo, cone_mat);
     cone.scale.y = -1;
-    cone.position.y = -1.3;
+    cone.position.y = -0.4;
     scene.add(cone)
         
     var geometry = new THREE.SphereBufferGeometry(0.55, 32, 32);
     mesh = new THREE.Mesh(geometry, icemat);
-    mesh.position.y = 0;
+    mesh.position.y = 1;
     mesh.opacity = 1;
 
     scene.add(mesh);
@@ -157,7 +157,7 @@ function makeParticles() {
   	var particle = newParticle();
 
   	particle.position.x = -0.1 + i*0.00001;
-  	particle.position.y = -0.6;
+  	particle.position.y = 0.4;
   	particle.material.opacity = 1;
 
   	scene.add( particle );
@@ -189,7 +189,7 @@ function render() {
     if ( particleSet[i].material.opacity <= 0.000 ) {
       
        particleSet[i].position.x = -0.001 * i + 0.001 * count;
-       particleSet[i].position.y = count * 0.01 + 0.01;
+       particleSet[i].position.y = 1 + count * 0.01 + 0.01;
        particleSet[i].material.opacity = 1;
     }
 
