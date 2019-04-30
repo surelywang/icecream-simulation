@@ -44,8 +44,8 @@
 	document.body.appendChild( renderer.domElement );
 	var updateGeo = [];
 	var scene = new THREE.Scene();
-	var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 100 );
-	camera.position.z = 3;
+	var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000 );
+	camera.position.z = 5;
 
 	// Add lightss to scene
 	var ambient = new THREE.AmbientLight(0xffffff);
@@ -62,6 +62,44 @@
 	loader.crossOrigin = "";
 	var texture1 = loader.load('https://envato-shoebox-0.imgix.net/c4c9/3704-8a4d-4315-8997-69a5b832e534/DSC_9637.jpg?auto=compress%2Cformat&fit=max&mark=https%3A%2F%2Felements-assets.envato.com%2Fstatic%2Fwatermark2.png&markalign=center%2Cmiddle&markalpha=18&w=700&s=45fd8158a2ca535f0d006114df005daf');
 	var texture2 = loader.load('https://11907110f9dd2f4142e1-7ffe570da0ff54a0cf08d83fa799f23c.ssl.cf1.rackcdn.com/Food_B_0045.jpg');
+	var texture3 = loader.load('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHfgGXhdWkxvY_uM4Yn4L90G6ELF9Ki7DNXBfJ4K278g2LPiB7');
+	var texture4 = loader.load('https://upload.wikimedia.org/wikipedia/commons/4/45/Blender3D_BW_Grid_256.png');
+
+	//radius
+	var radius = 0.2;	//orig: 0.2
+
+	//new particle creation
+	var particles = [];
+	var particleNum = 1000;
+	var angleD = 50;
+	var zAngleD = 15;
+
+	//canvas info
+	var centerX = window.innerWidth/2;
+	var centerY = window.innerHeight/2;
+	var maxX = centerX - 50;
+	var maxY = centerY - 20;
+	var maxR = 15;
+	var minR = 10;
+
+	function Particle() {
+		var partGeo = new THREE.SphereBufferGeometry(1, 8, 8);
+		var particle = new THREE.Mesh(partGeo, new THREE.MeshNormalMaterial());
+		return particle;
+	}
+
+	//generate particles
+	for (var i = 0; i < particleNum; i++) {
+		var part = Particle();
+		var angle = Math.random() * 2 * Math.PI;
+		var zAngle = Math.random() * 2 * Math.PI;
+		var zvelangle = Math.random()/zAngleD;
+		part.position.x = centerX + maxX * Math.cos(zAngle) * Math.sin(angle);
+		part.position.y = centerY + maxY * Math.cos(angle);
+
+		scene.add(part);
+		particles.push(new Particle());
+	}
 
 	//create sphere material
 	icemat = new THREE.MeshPhongMaterial({
@@ -74,15 +112,43 @@
 
 	//create base sphere
 	var geometry = new THREE.SphereGeometry(0.2, 200, 200);
-	var material = new THREE.MeshNormalMaterial();
 	var mesh = new THREE.Mesh( geometry,icemat );
+	mesh.position.y = 0.5
 	scene.add(mesh);
+
+	//create base plane
+	var tableGeo = new THREE.BoxGeometry(50, 50);
+	var material = new THREE.MeshNormalMaterial();
+	var table = new THREE.Mesh(tableGeo, material);
+	table.position.y = -27.35;
+	// table.rotateY(90);
+	scene.add(table);
+
+	//create base cone
+	var cone_geo = new THREE.ConeGeometry(0.7, 2.7, 10);
+	var cone_mat = new THREE.MeshPhongMaterial({
+      map: texture3,
+      transparent: false,
+      bumpMap: texture2
+    });
+    var cone = new THREE.Mesh(cone_geo, cone_mat);
+    cone.scale.y = -1;
+    cone.position.y = -1;
+    scene.add(cone);
+
+	/*
+	default settings:
+	var meltAmount = 0.08;
+	var spreadAmount = 1;
+	var poolThickness = 0.6;
+	var outwardSpeed = .06;
+	*/
 	
-	var radius = 0.2;
-	var mAmt = 0.2;
-	var spreadAmt = 0.5;
-	var puddleAmt = 0.2;
-	var speed = 0.3;
+	var yMin = -27.35;
+	var mAmt = 0.09;  	//0.2 was my first pass
+	var spreadAmt = 0.2;//orig: 0.2
+	var puddleAmt = 0.2;//orig: 0.2
+	var speed = 0.2;
 	var bmin = 0;
 	var bmax = radius + (0.5 * radius);
 	var vDist = bmax - bmin;
@@ -104,6 +170,9 @@
 			var outwardVector = pVector.multiplyScalar(((mAmt * spreadAmt)) * speed);
 			position.add(outwardVector);
 
+			// if (position.y <= yMin) {
+			// 	position.y = yMin;
+			// }
 			position.y += mAmt * puddleAmt;
 		}
 	})
@@ -143,6 +212,34 @@
 			updateFn(deltaMsec/1000, nowMsec/1000);
 		})
 	})
+
+	//first attempt at spherical particle creation
+	// var particleDelay = 1;
+
+	// //create particles
+	// var particleMax = 1000;
+	// var sphereGeo = new THREE.Geometry();
+	// loader.crossOrigin = true;
+	// var particleMaterial = new THREE.MeshPhongMaterial({
+	// 	color: 0xf0c0c3,
+	// 	size: 1.5,
+	// 	transparent: false,
+	// 	blending: THREE.AdditiveBlending,
+	// 	depthWrite: false
+	// });
+
+	// for (var i = 0; i < particleMax; i++) {
+	// 	let xPos = i % 2 === 0 ? radius : -radius;
+	// 	var vertex = new THREE.Vector3(xPos, 0, 0);
+
+	// 	vertex.rotationAxis = new THREE.Vector3(0, Math.random() * 2 - 1, Math.random() * 2 - 1);
+	// 	vertex.rotationAxis.normalize();
+	// 	vertex.delay = particleDelay * i;
+	// 	sphereGeo.vertices.push(vertex);
+	// }
+
+	// var sphere = new THREE.Points(sphereGeo, particleMaterial);
+	// scene.add(sphere);
 // var camera, scene, renderer;
 // var geometry, material, mesh;
 // var updateFcts = [];

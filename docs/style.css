@@ -89,7 +89,7 @@ ul, li {
 }
 
 li.iceCream:before {
-	content: "🍦";
+	content: url(iceCream.png);
 }
 
 .links {
