@@ -2,10 +2,19 @@ body {
 	font-family: 'Montserrat', serif;
 }
 
+em {
+	color: #f2c0ce;
+}
+b { 
+	color: #f2c0ce;
+}
+
+img {
+	width: 360px;
+}
+
 div.padded {
-	/*margin-left: 200px;*/
 	margin-left: 15%;
-	/*margin-right: 200px;*/
 	margin-right: 15%;
 }
 
@@ -13,7 +22,7 @@ div.top {
 	border: 20px double white;
 	background-color: #c0f2cb;
 	margin-top: 50px;
-	margin-bottom: 50px;
+	margin-bottom: 10px;
 }
 
 h1.top {
@@ -25,7 +34,6 @@ h1.top {
 	margin-top: 50px;
 	margin-bottom: 0px;
 	padding-left: 75px;
-	/*margin-left: 50px;*/
 }
 
 p.top {
@@ -46,6 +54,7 @@ h2 {
 	color: #f2c0ce;
 
 	margin-bottom: 0px;
+	margin-top: 0px;
 }
 
 h4 {
@@ -63,3 +72,34 @@ p {
 
 	line-height: 35px;
 }
+
+p.description {
+	font-size: 18px;
+	text-align: justify;
+	line-height: 30px;
+
+	margin-left: 5%;
+	margin-right: 5%;
+}
+
+ul, li {
+	list-style: none;
+	line-height: 25px;
+	margin-bottom: 7px;
+}
+
+li.iceCream:before {
+	content: "🍦";
+}
+
+.links {
+	text-align: center;
+	margin-bottom: 0px;
+}
+
+.links a {
+	text-decoration: none;
+	font-weight: 600;
+	color: #c0f2cb;
+}
+
