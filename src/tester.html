@@ -111,8 +111,10 @@ function init() {
 		var texture1 = loader.load('https://dairystore.unl.edu/images/IceCreamswatch/120508_Strawberry_Cheesecake_007.jpg');
 		// var texture1 = loader.load('https://st3.depositphotos.com/5843394/19177/i/1600/depositphotos_191778578-stock-photo-strawberry-ice-cream-texture-summer.jpg');
 		var texture2 = loader.load('https://11907110f9dd2f4142e1-7ffe570da0ff54a0cf08d83fa799f23c.ssl.cf1.rackcdn.com/Food_B_0045.jpg');
-		var texture3 = loader.load('https://c8.alamy.com/comp/CYTMDE/waffle-texture-background-macro-front-view-CYTMDE.jpg');
-		// var texture3 = loader.load('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_vFY4l2ffvHvHs96Jyn97f4_nwUR3xmlm7RTYia-6JFa9Sd60');
+    var texture3 = loader.load("https://thumbs.dreamstime.com/t/waffles-realistic-vector-seamless-texture-sweet-delicious-fo-template-advertising-design-food-134329614.jpg");
+    texture3.wrapS = THREE.RepeatWrapping;
+    texture3.wrapT = THREE.RepeatWrapping;
+    texture3.repeat.set(2,1);
 		var texture4 = loader.load('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGVtyLH5YjAK0MDfe-esJbRY0Rev2Oe6aOGSo7XPhcZaOiyRVbIQ');
 
 
