@@ -99,7 +99,7 @@ function init() {
 	var ambient = new THREE.AmbientLight(0xffffff);
 	var spot = new THREE.SpotLight( 0xffffff );
 	var point = new THREE.DirectionalLight( 0xD3D3D3 );
-	spot.position.set( 0, 0, 0 ).normalize();
+	spot.position.set( 0, 1, 0 ).normalize();
 	scene.add( spot );
 	scene.add( ambient );
 	scene.add( point );
@@ -120,9 +120,11 @@ function init() {
 
 	// CREATE MATERIALS
     icemat = new THREE.MeshPhongMaterial({
-      map: texture1,
+      // map: texture1,
+      color: 0xf5b1af,
       transparent: false,
       bumpMap: texture2,
+      // bumpScale: 0.5,
       displacementMap: texture1,
       displacementScale: 0.5
     });
@@ -136,9 +138,11 @@ function init() {
     });
 
     cone_mat = new THREE.MeshPhongMaterial({
-      map: texture3,
+      // map: texture3,
+      color: 0xe1b287,
       transparent: false,
-      bumpMap: texture3
+      bumpMap: texture3,
+      bumpScale: 5
     });
 
 
