@@ -1,0 +1,298 @@
+<html lang="en">
+
+<head>
+	<title>Ice Cream Simulation</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<style>
+		body {
+			font-family: Monospace;
+			margin: 0px;
+			overflow: hidden;
+		}
+		#info {
+			color: #fff;
+			position: absolute;
+			top: 10px;
+			width: 100%;
+			text-align: center;
+			z-index: 100;
+			display:block;
+		}
+		#info a {
+			color: #ff0080;
+			font-weight: bold;
+		}
+	</style>
+</head>
+
+<body>
+
+<div id="info">Ice Cream Simulation | Natalie Khamphanh, Lauren Martini, and Shirley Wang</div>
+
+<script src="../build/three.js"></script>
+<script src="js/WebGL.js"></script>
+<script src="perlin.js"></script>
+
+<script type="x-shader/x-vertex" id="vertexShader">
+	// Basic vertex shader
+	varying vec2 vUv;
+	void main() {
+		vUv = uv;
+		gl_Position = projectionMatrix * modelViewMatrix *
+		vec4( position, 1.0 );
+	}
+</script>
+
+<script type="x-shader/x-vertex" id="fragmentShader">
+	// Basic fragment shader
+	varying vec2 vUv;
+	void main() {
+		// color is RGBA: u, v, 0, 1
+		gl_FragColor = vec4( vec3( vUv, 0. ), 1. );
+	}
+</script>
+
+<script type="text/javascript" id="mainCode">
+
+// Base code = https://codepen.io/kaigth/
+// Reference 2 = https://codepen.io/kekkorider/pen/BRrgbY/
+
+// Setup Particles
+var particleSet = [],
+    particleCount = 200,
+    spreadMin = 0.01,
+    spreadMax = 0.08,
+    speed = 1000, // higher means slower
+    timeToSlow = 1;
+
+// Scene setups
+var SW = window.innerWidth, SH = window.innerHeight;
+var scene = new THREE.Scene();  // scene
+var camera, renderer;     // camera, render
+var icemat, icedrip, cone_mat;  // mesh materials
+var count = 0;  // unused atm
+var scoop;
+var scoop_geo = new THREE.SphereBufferGeometry(1, 32, 32);
+
+var material = new THREE.ShaderMaterial( {
+  vertexShader: document.getElementById( 'vertexShader' ).textContent,
+  fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+});
+
+// Set camera
+  camera = new THREE.PerspectiveCamera(60, SW / SH, 0.1, 1000);
+    camera.position.z = 5;
+
+    // Set renderer
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(SW, SH);
+  document.body.appendChild(renderer.domElement);
+
+  // Add lights to scene
+  var ambient = new THREE.AmbientLight(0xffffff);
+  var spot = new THREE.SpotLight( 0xffffff );
+  var point = new THREE.DirectionalLight( 0xD3D3D3 );
+  spot.position.set( 0, 0, 0 ).normalize();
+  scene.add( spot );
+  scene.add( ambient );
+  scene.add( point );
+
+  // Load all the textures we need
+  //   var loader = new THREE.TextureLoader();
+  //   loader.crossOrigin = "";
+  //   // var texture1 = loader.load('https://envato-shoebox-0.imgix.net/c4c9/3704-8a4d-4315-8997-69a5b832e534/DSC_9637.jpg?auto=compress%2Cformat&fit=max&mark=https%3A%2F%2Felements-assets.envato.com%2Fstatic%2Fwatermark2.png&markalign=center%2Cmiddle&markalpha=18&w=700&s=45fd8158a2ca535f0d006114df005daf');
+  //   var texture1 = loader.load('https://dairystore.unl.edu/images/IceCreamswatch/120508_Strawberry_Cheesecake_007.jpg');
+  //   // var texture1 = loader.load('https://st3.depositphotos.com/5843394/19177/i/1600/depositphotos_191778578-stock-photo-strawberry-ice-cream-texture-summer.jpg');
+  //   var texture2 = loader.load('https://11907110f9dd2f4142e1-7ffe570da0ff54a0cf08d83fa799f23c.ssl.cf1.rackcdn.com/Food_B_0045.jpg');
+  //   var texture3 = loader.load('https://c8.alamy.com/comp/CYTMDE/waffle-texture-background-macro-front-view-CYTMDE.jpg');
+  //   // var texture3 = loader.load('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_vFY4l2ffvHvHs96Jyn97f4_nwUR3xmlm7RTYia-6JFa9Sd60');
+  //   var texture4 = loader.load('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGVtyLH5YjAK0MDfe-esJbRY0Rev2Oe6aOGSo7XPhcZaOiyRVbIQ');
+
+
+  // // CREATE MATERIALS
+  //   icemat = new THREE.MeshPhongMaterial({
+  //     map: texture1,
+  //     transparent: false,
+  //     bumpMap: texture2,
+  //     displacementMap: texture1,
+  //     displacementScale: 0.5
+  //   });
+
+  //   icedrip = new THREE.MeshPhongMaterial({
+  //     map: texture1,
+  //     transparent: false,
+  //     bumpMap: texture2,
+  //     displacementMap: texture1,
+  //     displacementScale: 0.1
+  //   });
+
+  //   cone_mat = new THREE.MeshPhongMaterial({
+  //     map: texture3,
+  //     transparent: false,
+  //     bumpMap: texture3
+  //   });
+
+
+  //   // CREATE WAFFLE CONE
+  //   var cone_geo = new THREE.ConeGeometry(0.7, 2.7, 10);
+  //   cone_geo.openEnded = true;
+  //   var cone = new THREE.Mesh(cone_geo, cone_mat);
+  //   cone.scale.y = -1;
+  //   cone.position.y = -.75;
+  //   cone.geometry.computeVertexNormals(true);
+  //   scene.add(cone);
+        
+  //   // CREATE ICECREAM SCOOP
+  //   var scoop_geo = new THREE.SphereBufferGeometry(0.55, 32, 32);
+  //   //var scoop_geo = new THREE.IcosahedronGeometry(0.5, 6);
+  //   //var scoop = new THREE.Mesh(scoop_geo, material);
+  //   scoop = new THREE.Mesh(scoop_geo, icemat);
+  //   scoop.position.y = 1;
+  //   scoop.opacity = 1;
+  //   scoop.geometry.computeVertexNormals(true);
+  //   scene.add(scoop);
+
+
+// Call initializer and then render scene
+// init();
+render();
+
+
+// Intiialize scene
+function init() {
+  var loader = new THREE.TextureLoader();
+    loader.crossOrigin = "";
+    // var texture1 = loader.load('https://envato-shoebox-0.imgix.net/c4c9/3704-8a4d-4315-8997-69a5b832e534/DSC_9637.jpg?auto=compress%2Cformat&fit=max&mark=https%3A%2F%2Felements-assets.envato.com%2Fstatic%2Fwatermark2.png&markalign=center%2Cmiddle&markalpha=18&w=700&s=45fd8158a2ca535f0d006114df005daf');
+    var texture1 = loader.load('https://dairystore.unl.edu/images/IceCreamswatch/120508_Strawberry_Cheesecake_007.jpg');
+    // var texture1 = loader.load('https://st3.depositphotos.com/5843394/19177/i/1600/depositphotos_191778578-stock-photo-strawberry-ice-cream-texture-summer.jpg');
+    var texture2 = loader.load('https://11907110f9dd2f4142e1-7ffe570da0ff54a0cf08d83fa799f23c.ssl.cf1.rackcdn.com/Food_B_0045.jpg');
+    var texture3 = loader.load('https://c8.alamy.com/comp/CYTMDE/waffle-texture-background-macro-front-view-CYTMDE.jpg');
+    // var texture3 = loader.load('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_vFY4l2ffvHvHs96Jyn97f4_nwUR3xmlm7RTYia-6JFa9Sd60');
+    var texture4 = loader.load('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGVtyLH5YjAK0MDfe-esJbRY0Rev2Oe6aOGSo7XPhcZaOiyRVbIQ');
+
+
+  // CREATE MATERIALS
+    icemat = new THREE.MeshPhongMaterial({
+      map: texture1,
+      transparent: false,
+      bumpMap: texture2,
+      displacementMap: texture1,
+      displacementScale: 0.5
+    });
+
+    icedrip = new THREE.MeshPhongMaterial({
+      map: texture1,
+      transparent: false,
+      bumpMap: texture2,
+      displacementMap: texture1,
+      displacementScale: 0.1
+    });
+
+    cone_mat = new THREE.MeshPhongMaterial({
+      map: texture3,
+      transparent: false,
+      bumpMap: texture3
+    });
+
+
+    // CREATE WAFFLE CONE
+    var cone_geo = new THREE.ConeGeometry(0.7, 2.7, 10);
+    cone_geo.openEnded = true;
+    var cone = new THREE.Mesh(cone_geo, cone_mat);
+    cone.scale.y = -1;
+    cone.position.y = -.75;
+    cone.geometry.computeVertexNormals(true);
+    scene.add(cone);
+        
+    // CREATE ICECREAM SCOOP
+    // var scoop_geo = new THREE.SphereBufferGeometry(1, 32, 32);
+    //var scoop_geo = new THREE.IcosahedronGeometry(0.5, 6);
+    //var scoop = new THREE.Mesh(scoop_geo, material);
+    scoop = new THREE.Mesh(scoop_geo, icemat);
+    scoop.position.y = 1;
+    scoop.opacity = 1;
+    scoop.geometry.computeVertexNormals(true);
+    scene.add(scoop);
+}
+
+
+// CREATES A NEW PARTICLE
+function newParticle() {
+
+  var geometry = new THREE.SphereBufferGeometry( 0.2, 32, 32 );
+  // var material = new THREE.MeshBasicMaterial( {
+  //  color: 0xf3e5ab,
+  //  transparent: true } );
+
+  var particle = new THREE.Mesh( geometry, icemat );
+  return particle;
+
+}
+
+
+// CREATES DEFAULT ORIGIN PARTICLES
+function makeParticles() {
+
+  for ( var i = 1; i < 100; i++ ) {
+    var particle = newParticle();
+
+    particle.position.x = -0.1 + i*0.0001;
+    particle.position.y = 0.4;
+    particle.material.opacity = 1;
+
+    scene.add( particle );
+    particleSet.push( particle );
+
+  }
+
+}
+
+function update() {
+  //reposition verts
+  //call BEFORE animation
+  var vertLen = scoop.geometry.attributes.position.array.length;
+  for (var i = 0; i < vertLen; i++) {
+    var p = scoop.geometry.attributes.position.array[i];
+    p.normalize().multiplyScalar(1 + 0.3 * noise.perlin3(p.x, p.y, p.z));
+  }
+  scoop.geometry.attributes.position.needsUpdate = true;
+}
+
+function rRange(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+
+// Looping and Rendering
+function render() {
+  // update();
+  // for (var i = 0; i < scoop.geometry.vertices.length; i++) {
+  //   var p = scoop.geometry.vertices[i]
+  //   p.normalize().multiplyScalar(1 + 0.3 * noise.perlin3(p.x, p.y, p.z));
+  // }
+  // scoop.geometry.verticesNeedUpdate = true;
+  // scoop.geometry.attributes.position.needsUpdate = true;
+
+  // if(scoop) {
+  //   update(scoop);
+  // }
+
+  renderer.render(scene, camera);
+  var vertLen = scoop.geometry.attributes.position.array.length;
+  console.log(scoop.geometry.attributes.position.array);
+  // console.log(vertLen);
+  // for (var i = 0; i < vertLen; i+3) {
+  //   arr = [scoop.geometry.attributes.position.array[i + 0],
+  //               scoop.geometry.attributes.position.array[i + 1],
+  //               scoop.geometry.attributes.position.array[i + 2]];
+  //   // var p = scoop.geometry.attributes.position.array[i];
+  //   arr.normalize().multiplyScalar(1 + 0.3 * noise.perlin3(p.x, p.y, p.z));
+  // }
+  scoop.geometry.attributes.position.needsUpdate = true;
+  requestAnimationFrame(render);
+}
+
+</script>
+</body>
+</html>
