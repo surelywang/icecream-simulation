@@ -225,8 +225,9 @@
 		// keep looping
 		requestAnimationFrame( animate );
 		// measure time
-		lastTimeMsec = lastTimeMsec || nowMsec-1000/60;
-		var deltaMsec = Math.min(10000, nowMsec - lastTimeMsec);
+		console.log(nowMsec);
+		lastTimeMsec = lastTimeMsec || nowMsec-6000000/60;
+		var deltaMsec = Math.min(1000, nowMsec - lastTimeMsec);
 		lastTimeMsec = nowMsec;
 		// call each update function
 		updateGeo.forEach(function(updateFn){
