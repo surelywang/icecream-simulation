@@ -36,21 +36,75 @@
 <script type="x-shader/x-vertex" id="vertexShader">
 	// Basic vertex shader
 	varying vec2 vUv;
+  varying float vDepth;
 	void main() {
 		vUv = uv;
 		gl_Position = projectionMatrix * modelViewMatrix *
 		vec4( position, 1.0 );
+    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+    vDepth = -mvPosition.z;
 	}
 </script>
 
 <script type="x-shader/x-vertex" id="fragmentShader">
 	// Basic fragment shader
 	varying vec2 vUv;
+  varying float vDepth;
+
+  vec4 pack1K ( float depth ) {
+
+   depth /= 1000.0;
+   const vec4 bitSh = vec4( 256.0 * 256.0 * 256.0, 256.0 * 256.0, 256.0, 1.0 );
+   const vec4 bitMsk = vec4( 0.0, 1.0 / 256.0, 1.0 / 256.0, 1.0 / 256.0 );
+   vec4 res = fract( depth * bitSh );
+   res -= res.xxyz * bitMsk;
+   return res;
+}
+
 	void main() {
 		// color is RGBA: u, v, 0, 1
 		gl_FragColor = vec4( vec3( vUv, 0. ), 1. );
+    // if (length(gl_PointCoord.xy - 0.5) > 0.5) discard;
+    // gl_FragColor = pack1K(vDepth);
 	}
 </script>
+
+
+
+<!-- <script type="x-shader/x-vertex" id="vertexShader">
+  // Basic vertex shader
+  varying float vDepth;
+  void main() {
+    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+    vDepth = -mvPosition.z;
+  }
+</script>
+
+<script type="x-shader/x-vertex" id="fragmentShader">
+  // Basic fragment shader
+  varying float vDepth;
+
+  vec4 pack1K(float depth) {
+
+    depth /= 1000.0;
+    const vec4 bitSh = vec4(256.0 * 256.0 * 256.0, 256.0 * 256.0, 256.0, 1.0);
+    const vec3 bitMask = vec4(0.0, 1.0 / 256.0, 1.0 / 256.0, 1.0 / 256.0);
+    vec4 res = fract(depth * bitSh);
+    res -= res.xxyz * bitMask;
+    return res;
+
+  }
+
+  void main() {
+    if (length(gl_PointCoord.xy - 0.5) > 0.5) discard;
+    gl_FragColor = pack1K(vDepth);
+  }
+
+</script> -->
+
+
+
+
 
 <script type="text/javascript" id="mainCode">
 
@@ -62,8 +116,8 @@ var particleSet = [],
     particleCount = 200,
     spreadMin = 0.01,
     spreadMax = 0.08,
-    speed = 1000, // higher means slower
-    timeToSlow = 1;
+    speed = 100, // higher means slower
+    timeToSlow = 0.5;
 
 // Scene setups
 var SW = window.innerWidth, SH = window.innerHeight;
@@ -76,6 +130,8 @@ var material = new THREE.ShaderMaterial( {
 	vertexShader: document.getElementById( 'vertexShader' ).textContent,
 	fragmentShader: document.getElementById( 'fragmentShader' ).textContent
 });
+
+
 
 
 // Call initializer and then render scene
@@ -141,13 +197,13 @@ function init() {
 
 
    	// CREATE WAFFLE CONE
-    var cone_geo = new THREE.ConeGeometry(0.7, 2.7, 10);
-    cone_geo.openEnded = true;
-    var cone = new THREE.Mesh(cone_geo, cone_mat);
-    cone.scale.y = -1;
-    cone.position.y = -.75;
-    cone.geometry.computeVertexNormals(true);
-    scene.add(cone);
+    // var cone_geo = new THREE.ConeGeometry(0.7, 2.7, 10);
+    // cone_geo.openEnded = true;
+    // var cone = new THREE.Mesh(cone_geo, cone_mat);
+    // cone.scale.y = -1;
+    // cone.position.y = -.75;
+    // cone.geometry.computeVertexNormals(true);
+    // scene.add(cone);
         
     // CREATE ICECREAM SCOOP
     var scoop_geo = new THREE.SphereBufferGeometry(0.55, 32, 32);
@@ -160,19 +216,19 @@ function init() {
     scene.add(scoop);
 
     // particleSet[0] = scoop;
-    
+  
 }
 
 
 // CREATES A NEW PARTICLE
 function newParticle() {
 
-  var geometry = new THREE.SphereBufferGeometry( 0.2, 32, 32 );
+  var geometry = new THREE.SphereBufferGeometry( 0.03, 10, 10 );
   // var material = new THREE.MeshBasicMaterial( {
   // 	color: 0xf3e5ab,
   // 	transparent: true } );
 
-  var particle = new THREE.Mesh( geometry, icemat );
+  var particle = new THREE.Mesh( geometry, material );
   return particle;
 
 }
@@ -181,12 +237,13 @@ function newParticle() {
 // CREATES DEFAULT ORIGIN PARTICLES
 function makeParticles() {
 
-  for ( var i = 1; i < 100; i++ ) {
+  for ( var i = 0; i < 10; i++ ) {
   	var particle = newParticle();
 
-  	particle.position.x = -0.1 + i*0.0001;
-  	particle.position.y = 0.4;
-  	particle.material.opacity = 1;
+  	particle.position.x = -0.2 + i * 0.2;
+    particle.position.y = 0.18;
+    
+  	//particle.material.opacity = 1;
 
   	scene.add( particle );
   	particleSet.push( particle );
@@ -208,20 +265,19 @@ function render() {
 
 
 
-
   // Particle Simulation  
   if ( particleSet.length <= particleCount ) {
     makeParticles();
   }
 
-  for ( var i = 1; i < particleSet.length; i++ ) {
+  for ( var i = 0; i < particleSet.length; i++ ) {
     
-    particleSet[i].material.opacity -= 0.001;
-    if ( particleSet[i].material.opacity <= 0.000 ) {
-       particleSet[i].position.x = -0.001 * i + 0.001 * count;
-       particleSet[i].position.y = 1 + count * 0.01 + 0.01;
-       particleSet[i].material.opacity = 1;
-    }
+    // particleSet[i].material.opacity -= 0.008;
+    // if ( particleSet[i].material.opacity <= 0.000 ) {
+    //    particleSet[i].position.x = -0.001 * i + 0.001;
+    //    particleSet[i].position.y = -0.001;
+    //    particleSet[i].material.opacity = 1;
+    // }
 
     // particleSet[i].position.x += (0.002 + rRange( -spreadMin, spreadMax) / speed) * timeToSlow;
     particleSet[i].position.y -= (0.002 + rRange( -spreadMin, spreadMax) / speed) * timeToSlow;
@@ -235,3 +291,5 @@ function render() {
 </script>
 </body>
 </html>
+
+
