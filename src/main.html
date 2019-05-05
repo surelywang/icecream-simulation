@@ -156,10 +156,10 @@ function update() {
     p.multiplyScalar(0.95 + 0.01 * noise.perlin3(k*p.x, k*p.y + time, k*p.z));
     
     // Deform sphere by "melting" sphere from top-down; reposition vertex
-    if (p.y > -0.6) {
+    if (p.y > -0.75) {
       p.y -= 2 * 1/i;
     }
-    
+
     // if (i <= sphere.geometry.vertices.length/2) {
     //   p.x -= 0.000000001 * i;
     // } else {
