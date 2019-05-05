@@ -37,6 +37,7 @@
 <script src="js/lib/three/three.min.js"></script>
 <script src="js/lib/three/ColladaLoader.js"></script>
 <script src="js/lib/three/threex.vertexanimation.js"></script>
+<script src="perlin.js"></script>
 <script>
 
 	var renderer = new THREE.WebGLRenderer();
@@ -156,25 +157,45 @@
 	//animate the sphere
 	// instanciate the animation object
 	var animation = new THREEx.VertexAnimation(geometry, function(origin, position, delta, now){
-		position.y -= mAmt * vDist;
+		position.y -= 0.01;
+		var pVector = position.clone();
+		// console.log(position);
+		var randValX = Math.floor(Math.random() * 0.001) + 0.1;
+		randValX *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
+		position.x += randValX;
+		var randValZ = Math.floor(Math.random() * 0.001) + 0.1;
+		randValZ *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
+		position.z += randValZ;
+		var outwardVector = pVector.normalize().multiplyScalar(1 + 0.3 * noise.perlin3(position.x, position.y, position.z));
 
-		if (position.y < bmin) {
-			//calculate the amount below to generate a push vector
-			//var amtBelow = (bmin - position.y)/vDist;
-
-			var pVector = position.clone();
-			pVector.y = 0;
-
-			//noise!
-			//var noise = noiseAmp * gen.getVal((position.x) * noiseFreq + noiseOffset);
-			var outwardVector = pVector.multiplyScalar(((mAmt * spreadAmt)) * speed);
-			position.add(outwardVector);
-
-			// if (position.y <= yMin) {
-			// 	position.y = yMin;
-			// }
-			position.y += mAmt * puddleAmt;
+		if (position.y < -1) {
+			position.y = 0;
 		}
+		if (position.x > 1 || position.x < -1) {
+			position.x = 0;
+		}
+		if (position.z > 1 || position.z < -1) {
+			position.z = 0;
+		}
+		// position.y -= mAmt * vDist;
+
+		// if (position.y < bmin) {
+		// 	//calculate the amount below to generate a push vector
+		// 	//var amtBelow = (bmin - position.y)/vDist;
+
+		// 	var pVector = position.clone();
+		// 	pVector.y = 0;
+
+		// 	//noise!
+		// 	//var noise = noiseAmp * gen.getVal((position.x) * noiseFreq + noiseOffset);
+		// 	var outwardVector = pVector.normalize().multiplyScalar(1 + 0.3 * noise.perlin3(position.x, position.y, position.z));
+		// 	position.add(outwardVector);
+
+		// 	// if (position.y <= yMin) {
+		// 	// 	position.y = yMin;
+		// 	// }
+		// 	// position.y += mAmt * puddleAmt;
+		// }
 	})
 	// update the animation at every frame
 	updateGeo.push(function(delta, now){
@@ -204,8 +225,9 @@
 		// keep looping
 		requestAnimationFrame( animate );
 		// measure time
-		lastTimeMsec = lastTimeMsec || nowMsec-1000/60;
-		var deltaMsec = Math.min(200, nowMsec - lastTimeMsec);
+		console.log(nowMsec);
+		lastTimeMsec = lastTimeMsec || nowMsec-6000000/60;
+		var deltaMsec = Math.min(1000, nowMsec - lastTimeMsec);
 		lastTimeMsec = nowMsec;
 		// call each update function
 		updateGeo.forEach(function(updateFn){
