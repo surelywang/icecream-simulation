@@ -55,7 +55,10 @@
 		var effect, resolution;
 		var effectController;
 		var prevx, prevy, prevz;
+		var prevx2, prevy2, prevz2;
 		var px, py, pz;
+		var px2, py2, pz2;
+		var e1, e2; //effect activators
 		var time = 0;
 		var clock = new THREE.Clock();
 		init();
@@ -87,19 +90,35 @@
 			resolution = 28;
 			// effect = new THREE.MarchingCubes( resolution, materials, true, true );
 			effect = new THREE.MarchingCubes( resolution, materials[ current_material ].m, true, true );
+			effect2 = new THREE.MarchingCubes(resolution, materials[current_material].m, true, true);
 			//orig is 0, 0,0 for position and 700 for scale
 			effect.position.set( 0, 0, 0 );
 			effect.scale.set( 700, 700, 700 );
 			effect.enableUvs = false;
 			effect.enableColors = false;
 			scene.add( effect );
+
+			effect2.position.set( 0, 0, 0 );
+			effect2.scale.set( 700, 700, 700 );
+			effect2.enableUvs = false;
+			effect2.enableColors = false;
+			scene.add( effect2 );
 			// initialize prev arrays
 			prevx = [];
 			prevy = [];
 			prevz = [];
+			prevx2 = [];
+			prevy2 = [];
+			prevz2 = [];
+			//prev x,y,z arrays are not initialized
 			px = false;
 			py = false;
 			pz = false;
+			px2 = false;
+			py2 = false;
+			pz2 = false;
+			e1 = true; //activate first effect
+			e2 = false;//deactivate second effect
 			// RENDERER
 			renderer = new THREE.WebGLRenderer();
 			renderer.gammaOutput = true;
@@ -230,9 +249,13 @@
 					effect.enableColors = ( current_material === "colors" || current_material === "multiColors" ) ? true : false;
 				};
 			};
+			//NOTE:
+			//resolution, strength, and subtract(see update cube) impact radius
+			//from MarchingCubes.js
+			//radius = this.size * Math.sqrt( strength / subtract )
 			effectController = {
 				material: "shiny",
-				speed: 0.1,
+				speed: 0.05,
 				numBlobs: 5,
 				resolution: 28,
 				isolation: 80,
@@ -303,7 +326,7 @@
 					new THREE.Color(0x9400d3)
 				];
 			//add gravity stuff for realistic drip
-			var force = 9.8; //earth gravity force
+			//var force = 9.8; //earth gravity force
 			//notes on subtract
 			//orig is 12, 5 makes blobs separate less/larger ones
 			//20 makes blobs smaller and break apart more frequently
@@ -313,67 +336,98 @@
 			//orig: strength = 1.2 / ( ( Math.sqrt( numblobs ) - 1 ) / 4 + 1 );
 			strength = 1.2 / ( ( Math.sqrt( numblobs ) - 1 ) / 3 + 1 );
 			for ( i = 0; i < numblobs; i ++ ) {
-				if (px && py && pz) {
-					//there are previous x, y, and z to draw on
-					//get the x, y, and z at i
-					var x = prevx[i];
-					var y = prevy[i];
-					var z = prevz[i];
+				if (e1) {
+					if (px && py && pz) {
+						//there are previous x, y, and z to draw on
+						//get the x, y, and z at i
+						var x = prevx[i];
+						var y = prevy[i];
+						var z = prevz[i];
 
-					//now manipulate these to drip
-					ballx = x; //x doesn't change as it falls
-					//for random num between max (exc) and min (inc)
-					//Math.random() * (max - min) + min
-					var randY = Math.random() * 0.5;
-					bally = y - randY * time;
-					ballz = 0; //z never changes
+						//now manipulate these to drip
+						ballx = x; //x doesn't change as it falls
+						//for random num between max (exc) and min (inc)
+						//Math.random() * (max - min) + min
+						var randY = Math.random() * 0.5;
+						bally = y - randY * time;
+						ballz = 0; //z never changes
 
-					if (bally < 0) {
-						//ballx = Math.sin( i + time * ( 1.03 + 0.5 ) ) * 0.27 + 0.5;
-						bally = -0.5 * time;//Math.abs( Math.sin( i + 1.12 * time ) ) * 0.77; // dip into the floor
-						//ballz = Math.cos( i + time * 0.1 ) * 0.27 + 0.5;
+						if (bally < 0) {
+							//melt
+							bally = -0.5 * time;
+						}
+
+						//update prev array values
+						prevx[i] = ballx;
+						prevy[i] = bally;
+						prevz[i] = ballz;
+					} else {
+						//create default value and insert into prev x,y,z arrays
+						ballx = Math.random();
+						bally = 1;
+						ballz = 0;
+
+						prevx[i] = ballx;
+						prevy[i] = bally;
+						prevz[i] = ballz;					
 					}
+				} 
 
-					//update prev array values
-					prevx[i] = ballx;
-					prevy[i] = bally;
-					prevz[i] = ballz;
-				} else {
-					//create default value and insert into prev x,y,z arrays
-					ballx = Math.random();
-					bally = 1;
-					ballz = 0;
+				if (e2) {
+					if (px2 && py2 && pz2) {
+						//there are previous x, y, and z to draw on
+						//get the x, y, and z at i
+						var x = prevx2[i];
+						var y = prevy2[i];
+						var z = prevz2[i];
 
-					prevx[i] = ballx;
-					prevy[i] = bally;
-					prevz[i] = ballz;					
+						//now manipulate these to drip
+						ballx = x; //x doesn't change as it falls
+						//for random num between max (exc) and min (inc)
+						//Math.random() * (max - min) + min
+						var randY = Math.random() * 0.5;
+						bally = y - randY * time;
+						ballz = 0; //z never changes
+
+						if (bally < 0) {
+							//melt
+							bally = -0.5 * time;
+						}
+
+						//update prev array values
+						prevx2[i] = ballx;
+						prevy2[i] = bally;
+						prevz2[i] = ballz;
+					} else {
+						//create default value and insert into prev x,y,z arrays
+						ballx = Math.random();
+						bally = 1;
+						ballz = 0;
+
+						prevx2[i] = ballx;
+						prevy2[i] = bally;
+						prevz2[i] = ballz;					
+					}
 				}
-				//for drips along top edge
-				// bally = 1;
-				// ballx = Math.random();
-				// ballz = 0;
-				// if (bally < 1) {
-				// 	//for melting on the ground
-				// 	ballx = Math.sin( i + time * ( 1.03 + 0.5 ) ) * 0.27 + 0.5;
-				// 	bally = -0.5 * time;//Math.abs( Math.sin( i + 1.12 * time ) ) * 0.77; // dip into the floor
-				// 	ballz = Math.cos( i + time * 0.1 ) * 0.27 + 0.5;
-				// } else {
-				// 	ballx = Math.sin( i + 1.26 * time * ( 1.03 + 0.5 * Math.cos( 0.21 * i ) ) ) * 0.27 + 0.5;
-				// 	bally = Math.abs( Math.cos( i + 1.12 * time * Math.cos( 1.22 + 0.1424 * i ) ) ) * 0.77; // dip into the floor
-				// 	ballz = Math.cos( i + 1.32 * time * 0.1 * Math.sin( ( 0.92 + 0.53 * i ) ) ) * 0.27 + 0.5;
-				// 	// ballx = Math.sin( i + 1.26 * time * ( 1.03 + 0.5 * Math.cos( 0.21 * i ) ) ) * 0.27 + 0.5;
-				// 	// bally = Math.abs( Math.cos( i + 1.12 * time * Math.cos( 1.22 + 0.1424 * i ) ) ) * 0.77; // dip into the floor
-				// 	// ballz = Math.cos( i + 1.32 * time * 0.1 * Math.sin( ( 0.92 + 0.53 * i ) ) ) * 0.27 + 0.5;
-				// }
+				
 				if ( current_material === 'multiColors' ) {
 					object.addBall( ballx, bally, ballz, strength, subtract, rainbow[i % 7] );
 				} else {
 					object.addBall( ballx, bally, ballz, strength, subtract );
 				}
 			}
-			px = true;
-			py = true;
-			pz = true;
+
+			if (e1) {
+				px = true;
+				py = true;
+				pz = true;
+			}
+			if (e2) {
+				px2 = true;
+				py2 = true;
+				pz2 = true;
+			}
+			
 			if ( floor ) object.addPlaneY( 2, 12 );
 			if ( ceil ) object.addPlaneY(2, 12);
 			if ( wallz ) object.addPlaneZ( 2, 12 );
@@ -388,21 +442,53 @@
 		function render() {
 			var delta = clock.getDelta();
 			time += delta * effectController.speed * 0.5;
+			//at this rate, want to reset clock when time > 0.35
+			if (time > 0.35) {
+				if (e1) {
+					e1 = false;
+					e2 = true;
+				} else if (e2) {
+					e2 = false;
+					e1 = true;
+				}
+				px = false;
+				py = false;
+				pz = false;
+				px2 = false;
+				py2 = false;
+				pz2 = false;
+				time = 0;
+			}
+
+			//console.log(time);
 			// marching cubes
 			if ( effectController.resolution !== resolution ) {
 				resolution = effectController.resolution;
 				effect.init( Math.floor( resolution ) );
+				effect2.init( Math.floor( resolution ) );
 			}
 			if ( effectController.isolation !== effect.isolation ) {
 				effect.isolation = effectController.isolation;
+				effect2.isolation = effectController.isolation;
 			}
-			updateCubes( effect, time, effectController.numBlobs, effectController.floor, effectController.ceil, effectController.wallx, effectController.wallz );
-			// materials
-			if ( effect.material instanceof THREE.ShaderMaterial ) {
-				effect.material.uniforms[ "uBaseColor" ].value.setHSL( effectController.hue, effectController.saturation, effectController.lightness );
+			if (e2) {
+				updateCubes( effect2, time, effectController.numBlobs, effectController.floor, effectController.ceil, effectController.wallx, effectController.wallz );
+				// materials
+				if ( effect2.material instanceof THREE.ShaderMaterial ) {
+					effect2.material.uniforms[ "uBaseColor" ].value.setHSL( effectController.hue, effectController.saturation, effectController.lightness );
+				} else {
+					effect2.material.color.setHSL( effectController.hue, effectController.saturation, effectController.lightness );
+				}
 			} else {
-				effect.material.color.setHSL( effectController.hue, effectController.saturation, effectController.lightness );
+				updateCubes( effect, time, effectController.numBlobs, effectController.floor, effectController.ceil, effectController.wallx, effectController.wallz );
+				// materials
+				if ( effect.material instanceof THREE.ShaderMaterial ) {
+					effect.material.uniforms[ "uBaseColor" ].value.setHSL( effectController.hue, effectController.saturation, effectController.lightness );
+				} else {
+					effect.material.color.setHSL( effectController.hue, effectController.saturation, effectController.lightness );
+				}
 			}
+			
 			// lights
 			light.position.set( effectController.lx, effectController.ly, effectController.lz );
 			light.position.normalize();
