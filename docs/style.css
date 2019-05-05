@@ -24,7 +24,7 @@ div.padded {
 div.top {
 	border: 30px double white;
 	border-radius: 50px;
-	background-color: #EDA2B1;
+	background-color: #F2ACB4;
 	margin-top: 50px;
 	margin-bottom: 10px;
 }
@@ -47,7 +47,7 @@ p.top {
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 500;
 	font-size: 19px;
-	color: #FBD2DA;
+	color: #FADDE0;
 
 	text-align: center;
 	margin-top: 20px;
@@ -59,7 +59,7 @@ p.top {
 h2 {
 	font-family: 'Playfair Display', sans-serif;
 	font-size: 28px;
-	color: #E4BCC4;
+	color: #B9C3C0;
 
 	margin-bottom: 0px;
 	margin-top: 10px;
@@ -127,7 +127,7 @@ p.links1 a {
 .nav ul {
   width: 925px;
   height: 50px;
-  background-color: #DFE4E2;
+  background-color: #EBE7E3;
   border-radius: 20px;
 }
 
@@ -138,13 +138,13 @@ p.links1 a {
  
 .nav a {
   text-decoration: none;
-  color: #A2AAA6;
+  color: #AEA8A1;
   display: block;
   transition: .3s background-color;
 }
  
 .nav a:hover {
-  background-color: #E2EEE7;
+  background-color: #F4F4F4;
 }
  
 .nav a.active {
