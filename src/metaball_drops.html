@@ -443,7 +443,7 @@
 			var delta = clock.getDelta();
 			time += delta * effectController.speed * 0.5;
 			//at this rate, want to reset clock when time > 0.35
-			if (time > 0.35) {
+			if (time > 0.34) {
 				if (e1) {
 					e1 = false;
 					e2 = true;
@@ -458,6 +458,24 @@
 				py2 = false;
 				pz2 = false;
 				time = 0;
+			}
+
+			//need t
+
+			if (time > 0.20) {
+				if (e2) {
+					e1 = true;
+
+					px2 = false;
+					py2 = false;
+					pz2 = false;
+				} else if (e1) {
+					e2 = true;
+
+					px = false;
+					py = false;
+					pz = false;
+				}
 			}
 
 			//console.log(time);
