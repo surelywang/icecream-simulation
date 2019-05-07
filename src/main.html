@@ -129,9 +129,9 @@ function init() {
 
   //Marching Cubes stuff
   resolution = 28;
-  effect = new THREE.MarchingCubes( resolution, dropMaterial[ current_material ].m, true, true );
-  effect.position.set( 0, 0, 0 );
-  effect.scale.set( 700, 700, 700 );
+  effect = new THREE.MarchingCubes(resolution, dropMaterial[ current_material ].m, true, true );
+  effect.position.set( 0, -0.5, 3 );
+  effect.scale.set( 0.5, 1, 1 );
   effect.enableUvs = false;
   effect.enableColors = false;
   scene.add( effect );
@@ -184,8 +184,10 @@ function init() {
 function generateMaterials() {
       var materials = {
         "liquid": {
-          m: new THREE.MeshLambertMaterial( { color: 0xffffff, refractionRatio: 0.85 } ),
+          m: new THREE.MeshLambertMaterial( { color: 0xe0ffe4, refractionRatio: 0.85 } ),
           h: 0, s: 0, l: 1
+          //note: for the green color
+          //h: 128 s: 100 l: 94
         }
       };
       return materials;
