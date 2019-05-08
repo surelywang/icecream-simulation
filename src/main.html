@@ -135,7 +135,7 @@ function init() {
   //Marching Cubes stuff
   resolution = 28;
   effect = new THREE.MarchingCubes(resolution, dropMaterial[ current_material ].m, true, true );
-  effect.position.set( 0, -0.5, 3 );
+  effect.position.set( 0, -0.62, 3 );
   effect.scale.set( 0.5, 1, 1 );
   effect.enableUvs = false;
   effect.enableColors = false;
@@ -189,7 +189,8 @@ function init() {
 function generateMaterials() {
       var materials = {
         "liquid": {
-          m: new THREE.MeshLambertMaterial( { color: 0xe0ffe4, refractionRatio: 0.85 } ),
+          //m: new THREE.MeshLambertMaterial( { color: 0xe0ffe4, refractionRatio: 0.85 } ),
+          m: icemat,
           h: 0, s: 0, l: 1
           //note: for the green color
           //h: 128 s: 100 l: 94
@@ -233,11 +234,13 @@ function update() {
     // - own custonm glsl shaders
     // - marching cubes
     // - UI to change settings - more like a demo
-    change the texture mapping
+    //change the texture mapping
 
 
     // Rescale
-    p.multiplyScalar(0.95 + 0.01 * noise.perlin3(k*p.x, k*p.y + time, k*p.z));
+    p.multiplyScalar(0.95 + -1 * 0.01 * noise.perlin3(k*p.x, k*p.y + time, k*p.z));
+
+    
     
     // Deform sphere by "melting" sphere from top-down; reposition vertex
     if (p.y > -0.75) {
@@ -282,7 +285,7 @@ function setupGui() {
       effectController = {
         material: "liquid",
         speed: 0.05,
-        numBlobs: 5,
+        numBlobs: 3,
         resolution: 28,
         isolation: 80,
         floor: false,
