@@ -53,16 +53,26 @@
 		var materials, current_material;
 		var light, pointLight, ambientLight;
 		var effect, resolution;
+		var effect2;
 		var effectController;
+		var effectController2;
 		var prevx, prevy, prevz;
 		var prevx2, prevy2, prevz2;
 		var px, py, pz;
 		var px2, py2, pz2;
 		var e1, e2; //effect activators
 		var time = 0;
+		var time2 = 0;
 		var clock = new THREE.Clock();
+		var clock2 = new THREE.Clock();
+		var t1set = true;
+		var t2set = false;
+		var firstPass = true;
+		var clockset = false;
+
 		init();
 		animate();
+
 		function init() {
 			container = document.getElementById( 'container' );
 			// CAMERA
@@ -307,6 +317,28 @@
 			h.add(effectController, "ceil");
 			h.add( effectController, "wallx" );
 			h.add( effectController, "wallz" );
+
+			effectController2 = {
+				material: "shiny",
+				speed: 0.05,
+				numBlobs: 5,
+				resolution: 28,
+				isolation: 80,
+				floor: false,
+				ceil: false,
+				wallx: false,
+				wallz: false,
+				hue: 0.0,
+				saturation: 0.8,
+				lightness: 0.1,
+				lhue: 0.04,
+				lsaturation: 1.0,
+				llightness: 0.5,
+				lx: 0.5,
+				ly: 0.5,
+				lz: 1.0,
+				dummy: function () {}
+			};
 		}
 		// this controls content of marching cubes voxel field
 		function updateCubes( object, time, numblobs, floor, ceil, wallx, wallz ) {
@@ -441,43 +473,153 @@
 		}
 		function render() {
 			var delta = clock.getDelta();
+			// var delta2 = clock2.getDelta();
 			time += delta * effectController.speed * 0.5;
-			//at this rate, want to reset clock when time > 0.35
-			if (time > 0.35) {
-				if (e1) {
-					e1 = false;
-					e2 = true;
-				} else if (e2) {
-					e2 = false;
-					e1 = true;
-				}
+
+			if (time > 0.34) {
+				time = 0;
 				px = false;
 				py = false;
 				pz = false;
-				px2 = false;
-				py2 = false;
-				pz2 = false;
-				time = 0;
 			}
+			
+			//at this rate, want to reset clock when time > 0.34
+
+			//first pass
+			//from time = 0 -> 0.2 (e1 and !e2)
+			// @0.2 time2 = 0, create a new clock()
+			//from time = 0.2 -> 0.34 (e1 and e2)
+			//		time 2 = 0 -> 0.14
+			// @ time 2 = 0.2, time = 0
+			// from time2 =  0.2 -> 0.34 (!e1 and e2)
+			// if (firstPass) {
+			// 	if (!clockset && time > 0.2) {
+			// 		time2 = 0;
+			// 		clock2 = new THREE.Clock();
+			// 		clockset = true;
+			// 		e2 = true;
+			// 		t2set = true;
+			// 		console.log("clockset");
+
+			// 		firstPass = false;
+			// 		console.log("firstPass = false");
+			// 	} 
+			// } else {
+			// 	//not first pass so...
+			// 	//get the change in delta for time2 to be calculated
+			// 	var delta2 = clock2.getDelta();
+			// 	time2 += delta2 * effectController2.speed * 0.5;
+
+			// 	console.log(time);
+			// 	console.log(time2);
+
+			// 	// if (time > 0) {
+					
+			// 	// }
+
+			// 	if (time2 > 0.34) {
+			// 		e2 = false;
+			// 		t2set = false;
+			// 	} else if (time > 0.34) {
+			// 		e1 = false;
+			// 		t1set = false;
+			// 	}
+
+			// 	// if (time > 0.2 && !t2set) {
+			// 	// 	e2 = true;
+			// 	// 	time2 = 0;
+			// 	// 	t2set = true;
+			// 	// 	px2 = false;
+			// 	// 	py2 = false;
+			// 	// 	pz2 = false;
+			// 	// 	delta2 = clock2.getDelta();
+			// 	// 	time2 += delta2 * effectController2.speed * 0.5;
+			// 	// }
+
+			// 	//if time >= 0 && time <= 0.2
+			// 	if (time >= 0 && time <= 0.2) {
+			// 		//e1 is active and e2 is false
+			// 		e1 = true;
+			// 		e2 = false;
+			// 	} else if (time > 0.2 && time <= 0.34 && !t2set) {
+			// 		//e2 is started
+			// 		e1 = true;
+			// 		e2 = true;
+			// 		time2 = 0;
+			// 		t2set = true;
+			// 		px2 = false;
+			// 		py2 = false;
+			// 		pz2 = false;
+
+			// 		delta2 = clock2.getDelta();
+			// 		time2 += delta2 * effectController2.speed * 0.5;
+			// 	} else if (time2 >= 0 && time2 <= 0.2) {
+			// 		e1 = true;
+			// 		e2 = true;
+			// 	} else if (time2 > 0.2 && time2 <= 0.34 && !t1set) {
+			// 		e1 = true;
+			// 		e2 = true;
+			// 		time1 = 0;
+			// 		t1set = true;
+			// 		px = false;
+			// 		py = false;
+			// 		pz = false;
+
+			// 		delta = clock.getDelta();
+			// 		time += delta * effectController.speed * 0.5;
+			// 	}
+			// }
+
+			// var delta2 = clock2.getDelta();
+			// time2 += delta2 * effectController2.speed * 0.5;
+
+			// if (time > 0.35 && time2 >= 0) {
+			// 	console.log("time is greater than 0.34");
+			// 	e1 = false;
+			// 	t1set = false;
+			// }else if (time2 > 0.2 && time2 < 0.2 && !t1set) {
+			// 	//reset e1
+			// 	console.log("e1 is reset");
+			// 	e1 = true;
+			// 	time = 0;
+			// 	t1set = true;
+			// 	px = false;
+			// 	py = false;
+			// 	pz = false;
+			// 	delta = clock.getDelta();
+			// 	time += delta * effectController.speed * 0.5;
+			// }
+			// if (time2 > 0.35 && time >= 0) {
+			// 	e2 = false;
+			// 	t2set = false;
+			// }
 
 			//console.log(time);
 			// marching cubes
 			if ( effectController.resolution !== resolution ) {
 				resolution = effectController.resolution;
 				effect.init( Math.floor( resolution ) );
-				effect2.init( Math.floor( resolution ) );
+				// effect2.init( Math.floor( resolution ) );
 			}
 			if ( effectController.isolation !== effect.isolation ) {
 				effect.isolation = effectController.isolation;
-				effect2.isolation = effectController.isolation;
+				// effect2.isolation = effectController.isolation;
 			}
+			if ( effectController2.resolution !== resolution ) {
+				resolution = effectController2.resolution;
+				effect2.init( Math.floor( resolution ) );
+			}
+			if ( effectController2.isolation !== effect2.isolation ) {
+				effect2.isolation = effectController2.isolation;
+			}
+
 			if (e2) {
-				updateCubes( effect2, time, effectController.numBlobs, effectController.floor, effectController.ceil, effectController.wallx, effectController.wallz );
+				updateCubes( effect2, time2, effectController2.numBlobs, effectController2.floor, effectController2.ceil, effectController2.wallx, effectController2.wallz );
 				// materials
 				if ( effect2.material instanceof THREE.ShaderMaterial ) {
-					effect2.material.uniforms[ "uBaseColor" ].value.setHSL( effectController.hue, effectController.saturation, effectController.lightness );
+					effect2.material.uniforms[ "uBaseColor" ].value.setHSL( effectController2.hue, effectController2.saturation, effectController2.lightness );
 				} else {
-					effect2.material.color.setHSL( effectController.hue, effectController.saturation, effectController.lightness );
+					effect2.material.color.setHSL( effectController2.hue, effectController2.saturation, effectController2.lightness );
 				}
 			} else {
 				updateCubes( effect, time, effectController.numBlobs, effectController.floor, effectController.ceil, effectController.wallx, effectController.wallz );
