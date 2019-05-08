@@ -34,7 +34,6 @@
 <script src="js/WebGL.js"></script>
 <script src="js/perlin.js"></script>
 
-
 <script type="text/javascript" id="mainCode">
 
 // Scene setups
@@ -81,6 +80,11 @@ function init() {
 	scene.add( ambient );
 	scene.add( point );
 
+  // Try to make icecream look more specular
+  // import project code for phong? glsl
+
+  // Melting: have sphere shrink inwards
+  // Have UV mapping move downwards with icecream?
 
   // DEFINE mesh materials
   icemat = new THREE.MeshPhongMaterial({      // Ice cream material
@@ -152,6 +156,17 @@ function update() {
   for (var i = 0; i < sphere.geometry.vertices.length; i++) {
     var p = sphere.geometry.vertices[i];
     p.normalize();
+
+    // distort top portion of sphere s.t. it goes inward, along the normal
+    // check if you can retrieve mesh normals
+
+    // technical work
+    // - own custonm glsl shaders
+    // - marching cubes
+    // - UI to change settings - more like a demo
+    change the texture mapping
+
+
     // Rescale
     p.multiplyScalar(0.95 + 0.01 * noise.perlin3(k*p.x, k*p.y + time, k*p.z));
     
