@@ -135,8 +135,8 @@ function init() {
   //Marching Cubes stuff
   resolution = 28;
   effect = new THREE.MarchingCubes(resolution, dropMaterial[ current_material ].m, true, true );
-  effect.position.set( 0, -0.5, 3 );
-  effect.scale.set( 0.5, 1, 1 );
+  effect.position.set( 0, -0.58, 3 );
+  effect.scale.set( 0.4, 0.9, 1 );
   effect.enableUvs = false;
   effect.enableColors = false;
   scene.add( effect );
@@ -189,7 +189,8 @@ function init() {
 function generateMaterials() {
       var materials = {
         "liquid": {
-          m: new THREE.MeshLambertMaterial( { color: 0xe0ffe4, refractionRatio: 0.85 } ),
+          // m: new THREE.MeshLambertMaterial( { color: 0xe0ffe4, refractionRatio: 0.85 } ),
+          m: icemat,
           h: 0, s: 0, l: 1
           //note: for the green color
           //h: 128 s: 100 l: 94
@@ -233,11 +234,13 @@ function update() {
     // - own custonm glsl shaders
     // - marching cubes
     // - UI to change settings - more like a demo
-    change the texture mapping
+    //change the texture mapping
 
 
     // Rescale
-    p.multiplyScalar(0.95 + 0.01 * noise.perlin3(k*p.x, k*p.y + time, k*p.z));
+    p.multiplyScalar(0.95 + -1 * 0.01 * noise.perlin3(k*p.x, k*p.y + time, k*p.z));
+
+    
     
     // Deform sphere by "melting" sphere from top-down; reposition vertex
     if (p.y > -0.75) {
@@ -282,7 +285,7 @@ function setupGui() {
       effectController = {
         material: "liquid",
         speed: 0.05,
-        numBlobs: 5,
+        numBlobs: 3,
         resolution: 28,
         isolation: 80,
         floor: false,
@@ -350,11 +353,19 @@ function setupGui() {
       //notes on subtract
       //orig is 12, 5 makes blobs separate less/larger ones
       //20 makes blobs smaller and break apart more frequently
-      subtract = 1; 
+      var overallTime = performance.now() * 0.0009;    // Time interval
+      // console.log(overallTime);
+
+      subtract = 40;
+      // subtract = 40; 
+      if (overallTime > 20) {
+        subtract = 5; 
+      }
+
       //debug
       //console.log(time);
       //orig: strength = 1.2 / ( ( Math.sqrt( numblobs ) - 1 ) / 4 + 1 );
-      strength = 1.2 / ( ( Math.sqrt( numblobs ) - 1 ) / 3 + 1 );
+      strength = 0.5 / ( ( Math.sqrt( numblobs ) - 1 ) / 3 + 1 );
       for ( i = 0; i < numblobs; i ++ ) {
         if (e1) {
           if (px && py && pz) {
@@ -430,11 +441,7 @@ function setupGui() {
           }
         }
         
-        if ( current_material === 'multiColors' ) {
-          object.addBall( ballx, bally, ballz, strength, subtract, rainbow[i % 7] );
-        } else {
-          object.addBall( ballx, bally, ballz, strength, subtract );
-        }
+        object.addBall( ballx, bally, ballz, strength, subtract );
       }
 
       if (e1) {
@@ -469,12 +476,16 @@ function render() {
   // var delta2 = clock2.getDelta();
   time += delta * effectController.speed * 0.5;
 
+  var overallTime = performance.now() * 0.0009;
+
   if (time > 0.34) {
     time = 0;
     px = false;
     py = false;
     pz = false;
   }
+
+  effectController.numblobs = (effectController.numblobs + overallTime);
 
   // marching cubes
     if ( effectController.resolution !== resolution ) {

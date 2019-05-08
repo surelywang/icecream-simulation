@@ -1,45 +1,3 @@
-<html lang="en">
-
-<head>
-  <title>Ice Cream Simulation</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-  <style>
-    body {
-      font-family: Monospace;
-      margin: 0px;
-      overflow: hidden;
-    }
-    #info {
-      color: #fff;
-      position: absolute;
-      top: 10px;
-      width: 100%;
-      text-align: center;
-      z-index: 100;
-      display:block;
-    }
-    #info a {
-      color: #ff0080;
-      font-weight: bold;
-    }
-  </style>
-</head>
-
-<body>
-
-<div id="info">Ice Cream Simulation | Natalie Khamphanh, Lauren Martini, and Shirley Wang</div>
-
-<script src="../build/three.js"></script>
-<script src="js/WebGL.js"></script>
-<script src="js/perlin.js"></script>
-<script src="js/WebGL.js"></script>
-<script type="x-shader/x-vertex" id="vertexShader" src="shaders/Displacement.vert"></script>
-<script type="x-shader/x-vertex" id="fragmentShader" src="shaders/Displacement.frag"></script>
-
-
-<script type="text/javascript" id="mainCode">
-
 // Scene setups
 var SW = window.innerWidth, SH = window.innerHeight;
 var scene = new THREE.Scene();  // scene
@@ -53,7 +11,10 @@ var ice_mat, cone_mat;                       // Declare mesh materials
 var sphere, cone;                            // Declare objects
 
 
-var material, uniforms;
+var material = new THREE.ShaderMaterial( {
+  vertexShader: document.getElementById( 'vertexShader' ).textContent,
+  fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+});
 
 
 // Call functions
@@ -111,23 +72,13 @@ function init() {
       bumpScale: 0.5
     });
 
-  uniforms = {
-    u_texture_2: { type: "t", value: THREE.ImageUtils.loadTexture( "textures/texture1.png" ) }
-  };
-
-  material = new THREE.ShaderMaterial( {
-    uniforms: uniforms,
-    vertexShader: document.getElementById( 'vertexShader' ).textContent,
-    fragmentShader: document.getElementById( 'fragmentShader' ).textContent
-  });
-
 
   // DEFINE meshes
 
   // Scoop mesh
   var sphere_geometry = new THREE.SphereGeometry(0.1, 128, 128);
   var material = new THREE.MeshNormalMaterial();
-  sphere = new THREE.Mesh(sphere_geometry, material);
+  sphere = new THREE.Mesh(sphere_geometry, icemat);
   sphere.position.y = 1;
   sphere.castShadow = true;
 
@@ -214,9 +165,3 @@ function render() {
   requestAnimationFrame(render);
   
 }
-
-</script>
-</body>
-</html>
-
-
