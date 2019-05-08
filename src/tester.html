@@ -203,13 +203,13 @@ function init() {
 
 
    	// CREATE WAFFLE CONE
-    // var cone_geo = new THREE.ConeGeometry(0.7, 2.7, 10);
-    // cone_geo.openEnded = true;
-    // var cone = new THREE.Mesh(cone_geo, cone_mat);
-    // cone.scale.y = -1;
-    // cone.position.y = -.75;
-    // cone.geometry.computeVertexNormals(true);
-    // scene.add(cone);
+    var cone_geo = new THREE.ConeGeometry(0.7, 2.7, 10);
+    cone_geo.openEnded = true;
+    var cone = new THREE.Mesh(cone_geo, cone_mat);
+    cone.scale.y = -1;
+    cone.position.y = -.75;
+    cone.geometry.computeVertexNormals(true);
+    scene.add(cone);
         
     // CREATE ICECREAM SCOOP
     var scoop_geo = new THREE.SphereBufferGeometry(0.55, 32, 32);
