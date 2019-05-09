@@ -259,198 +259,6 @@ function updateMelting() {
 
 }
 
-//event controller and gui
-function setupGui() {
-    var createHandler = function ( id ) {
-    return function () {
-      var mat_old = dropMaterial[ current_material ];
-      mat_old.h = m_h.getValue();
-      mat_old.s = m_s.getValue();
-      mat_old.l = m_l.getValue();
-      current_material = id;
-      var mat = dropMaterial[ id ];
-      effect.material = mat.m;
-      m_h.setValue( mat.h );
-      m_s.setValue( mat.s );
-      m_l.setValue( mat.l );
-      effect.enableUvs = ( current_material === "textured" ) ? true : false;
-      effect.enableColors = ( current_material === "colors" || current_material === "multiColors" ) ? true : false;
-    };
-    };
-    //NOTE:
-    //resolution, strength, and subtract(see update cube) impact radius
-    //from MarchingCubes.js
-    //radius = this.size * Math.sqrt( strength / subtract )
-    effectController = {
-    // material: "liquid",
-    speed: 0.05,
-    numBlobs: 5,
-    resolution: 28,
-    isolation: 80,
-    
-    hue: 0.0,
-    saturation: 0.0,
-    lightness: 0.5,
-    
-    dummy: function () {},
-    // CUSTOM SHADER - PLACEHOLDERS
-    strawberry: function() {},
-    chocolate: function() {},
-    mint: function() {},
-    greenTea: function() {},
-    vanilla: function() {}
-    };
-    
-    var flavors, temp;
-    var gui = new dat.GUI();
-    flavors = gui.addFolder('Ice Cream Flavors');
-    flavors.add(effectController, 'strawberry').name("Strawberry");
-    flavors.add(effectController, 'chocolate').name("Chocolate");
-    flavors.add(effectController, 'mint').name("Mint");
-    flavors.add(effectController, 'greenTea').name("Green Tea");
-    flavors.add(effectController, 'vanilla').name("Vanilla");
-    flavors.open();
-
-    // gui.add(effectController, 'temperature', 0, 120).name("Temperature");
-    gui.add(effectController, 'speed', 0, 20).name("Temperature");
-
-
-    //temp: if we want to add a second wave of drops somehow
-    effectController2 = {
-      material: "liquid",
-      speed: 0.05,
-      numBlobs: 5,
-      resolution: 28,
-      isolation: 80,
-      // floor: false,
-      // ceil: false,
-      // wallx: false,
-      // wallz: false,
-      hue: 0.0,
-      saturation: 0.0,
-      lightness: 0.5,
-      // lhue: 0.04,
-      // lsaturation: 1.0,
-      // llightness: 0.5,
-      // lx: 0.5,
-      // ly: 0.5,
-      // lz: 1.0,
-      dummy: function () {}
-    };
-  }
-
-    //helper: update drops
-    function updateCubes( object, time, numblobs, floor, ceil, wallx, wallz ) {
-      object.reset();
-      // fill the field with some metaballs
-      var i, ballx, bally, ballz, subtract, strength;
-      ballx = Math.random();
-      bally = 1;
-      ballz = 0;
-      var rainbow = [
-          new THREE.Color(0xff0000),
-          new THREE.Color(0xff7f00),
-          new THREE.Color(0xffff00),
-          new THREE.Color(0x00ff00),
-          new THREE.Color(0x0000ff),
-          new THREE.Color(0x4b0082),
-          new THREE.Color(0x9400d3)
-        ];
-      //add gravity stuff for realistic drip
-      //var force = 9.8; //earth gravity force
-      //notes on subtract
-      //orig is 12, 5 makes blobs separate less/larger ones
-      //20 makes blobs smaller and break apart more frequently
-      var overallTime = performance.now() * 0.0009;    // Time interval
-      // console.log(overallTime);
-
-      subtract = 40;
-      // subtract = 40; 
-      if (overallTime > 20) {
-        subtract = 5; 
-      }
-
-      //debug
-      //console.log(time);
-      //orig: strength = 1.2 / ( ( Math.sqrt( numblobs ) - 1 ) / 4 + 1 );
-      strength = 0.5 / ( ( Math.sqrt( numblobs ) - 1 ) / 3 + 1 );
-      for ( i = 0; i < numblobs; i ++ ) {
-        if (e1) {
-          if (px && py && pz) {
-            //there are previous x, y, and z to draw on
-            //get the x, y, and z at i
-            var x = prevx[i];
-            var y = prevy[i];
-            var z = prevz[i];
-
-            //now manipulate these to drip
-            ballx = x; //x doesn't change as it falls
-            //for random num between max (exc) and min (inc)
-            //Math.random() * (max - min) + min
-            var randY = Math.random() * 0.5;
-            bally = y - randY * time;
-            ballz = 0; //z never changes
-
-            if (bally < 0) {
-              //melt
-              bally = -0.5 * time;
-            }
-
-            //update prev array values
-            prevx[i] = ballx;
-            prevy[i] = bally;
-            prevz[i] = ballz;
-          } else {
-            //create default value and insert into prev x,y,z arrays
-            ballx = Math.random();
-            bally = 1;
-            ballz = 0;
-
-            prevx[i] = ballx;
-            prevy[i] = bally;
-            prevz[i] = ballz;         
-          }
-        } 
-
-        if (e2) {
-          if (px2 && py2 && pz2) {
-            //there are previous x, y, and z to draw on
-            //get the x, y, and z at i
-            var x = prevx2[i];
-            var y = prevy2[i];
-            var z = prevz2[i];
-
-            //now manipulate these to drip
-            ballx = x; //x doesn't change as it falls
-            //for random num between max (exc) and min (inc)
-            //Math.random() * (max - min) + min
-            var randY = Math.random() * 0.5;
-            bally = y - randY * time;
-            ballz = 0; //z never changes
-
-            if (bally < 0) {
-              //melt
-              bally = -0.5 * time;
-            }
-
-            //update prev array values
-            prevx2[i] = ballx;
-            prevy2[i] = bally;
-            prevz2[i] = ballz;
-          } else {
-            //create default value and insert into prev x,y,z arrays
-            ballx = Math.random();
-            bally = 1;
-            ballz = 0;
-
-            prevx2[i] = ballx;
-            prevy2[i] = bally;
-            prevz2[i] = ballz;          
-          }
-        }
-        
-        object.addBall( ballx, bally, ballz, strength, subtract );
-      }
 
 function animate() {
   requestAnimationFrame( animate );
@@ -466,7 +274,6 @@ function updateDripping() {
   //metaball specific stuff
   var delta = clock.getDelta();
   // var delta2 = clock2.getDelta();
-  // time += delta * effectController.speed * 0.5 * effectController.temperature/50;
   time += delta * effectController.speed * 0.5;
 
   var overallTime = performance.now() * 0.0009;
@@ -603,7 +410,7 @@ requestAnimationFrame(render);
 
 //event controller and gui
 function setupGui() {
-  var createHandler = function ( id ) {
+    var createHandler = function ( id ) {
     return function () {
       var mat_old = dropMaterial[ current_material ];
       mat_old.h = m_h.getValue();
@@ -624,31 +431,62 @@ function setupGui() {
   //from MarchingCubes.js
   //radius = this.size * Math.sqrt( strength / subtract )
   effectController = {
-    material: "liquid",
+  // material: "liquid",
     speed: 0.05,
-    numBlobs: 3,
+    numBlobs: 5,
     resolution: 28,
     isolation: 80,
-    floor: false,
-    ceil: false,
-    wallx: false,
-    wallz: false,
+    
     hue: 0.0,
-    saturation: 0.8,
-    lightness: 0.1,
-    lhue: 0.04,
-    lsaturation: 1.0,
-    llightness: 0.5,
-    lx: 0.5,
-    ly: 0.5,
-    lz: 1.0,
-    dummy: function () {}
-  };
-  //possibly unneeded (just for GUI?)
-  var h, m_h, m_s, m_l;
-  var gui = new dat.GUI();
+    saturation: 0.0,
+    lightness: 0.5,
+    
+    dummy: function () {},
+    // CUSTOM SHADER - PLACEHOLDERS
+    strawberry: function() {},
+    chocolate: function() {},
+    mint: function() {},
+    greenTea: function() {},
+    vanilla: function() {}
+    };
+    
+    var flavors, temp;
+    var gui = new dat.GUI();
+    flavors = gui.addFolder('Ice Cream Flavors');
+    flavors.add(effectController, 'strawberry').name("Strawberry");
+    flavors.add(effectController, 'chocolate').name("Chocolate");
+    flavors.add(effectController, 'mint').name("Mint");
+    flavors.add(effectController, 'greenTea').name("Green Tea");
+    flavors.add(effectController, 'vanilla').name("Vanilla");
+    flavors.open();
 
-}
+    // gui.add(effectController, 'temperature', 0, 120).name("Temperature");
+    gui.add(effectController, 'speed', 0, 20).name("Temperature");
+
+
+    //temp: if we want to add a second wave of drops somehow
+    effectController2 = {
+      material: "liquid",
+      speed: 0.05,
+      numBlobs: 5,
+      resolution: 28,
+      isolation: 80,
+      // floor: false,
+      // ceil: false,
+      // wallx: false,
+      // wallz: false,
+      hue: 0.0,
+      saturation: 0.0,
+      lightness: 0.5,
+      // lhue: 0.04,
+      // lsaturation: 1.0,
+      // llightness: 0.5,
+      // lx: 0.5,
+      // ly: 0.5,
+      // lz: 1.0,
+      dummy: function () {}
+    };
+  }
 
 
 
