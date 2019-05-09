@@ -262,74 +262,91 @@ function update() {
 
 //event controller and gui
 function setupGui() {
-      var createHandler = function ( id ) {
-        return function () {
-          var mat_old = dropMaterial[ current_material ];
-          mat_old.h = m_h.getValue();
-          mat_old.s = m_s.getValue();
-          mat_old.l = m_l.getValue();
-          current_material = id;
-          var mat = dropMaterial[ id ];
-          effect.material = mat.m;
-          m_h.setValue( mat.h );
-          m_s.setValue( mat.s );
-          m_l.setValue( mat.l );
-          effect.enableUvs = ( current_material === "textured" ) ? true : false;
-          effect.enableColors = ( current_material === "colors" || current_material === "multiColors" ) ? true : false;
-        };
-      };
-      //NOTE:
-      //resolution, strength, and subtract(see update cube) impact radius
-      //from MarchingCubes.js
-      //radius = this.size * Math.sqrt( strength / subtract )
-      effectController = {
-        material: "liquid",
-        speed: 0.05,
-        numBlobs: 3,
-        resolution: 28,
-        isolation: 80,
-        floor: false,
-        ceil: false,
-        wallx: false,
-        wallz: false,
-        hue: 0.0,
-        saturation: 0.8,
-        lightness: 0.1,
-        lhue: 0.04,
-        lsaturation: 1.0,
-        llightness: 0.5,
-        lx: 0.5,
-        ly: 0.5,
-        lz: 1.0,
-        dummy: function () {}
-      };
-      //possibly unneeded (just for GUI?)
-      var h, m_h, m_s, m_l;
-      var gui = new dat.GUI();
+    var createHandler = function ( id ) {
+    return function () {
+      var mat_old = dropMaterial[ current_material ];
+      mat_old.h = m_h.getValue();
+      mat_old.s = m_s.getValue();
+      mat_old.l = m_l.getValue();
+      current_material = id;
+      var mat = dropMaterial[ id ];
+      effect.material = mat.m;
+      m_h.setValue( mat.h );
+      m_s.setValue( mat.s );
+      m_l.setValue( mat.l );
+      effect.enableUvs = ( current_material === "textured" ) ? true : false;
+      effect.enableColors = ( current_material === "colors" || current_material === "multiColors" ) ? true : false;
+    };
+    };
+    //NOTE:
+    //resolution, strength, and subtract(see update cube) impact radius
+    //from MarchingCubes.js
+    //radius = this.size * Math.sqrt( strength / subtract )
+    effectController = {
+    // material: "liquid",
+    speed: 0.05,
+    numBlobs: 5,
+    resolution: 28,
+    isolation: 80,
+    // floor: false,
+    // ceil: false,
+    // wallx: false,
+    // wallz: false,
+    hue: 0.0,
+    saturation: 0.0,
+    lightness: 0.5,
+    // lhue: 0.04,
+    // lsaturation: 0.5,
+    // llightness: 0.5,
+    // lx: 0.5,
+    // ly: 0.5,
+    // lz: 1.0,
+    dummy: function () {},
+    // CUSTOM SHADER - PLACEHOLDERS
+    strawberry: function() {},
+    chocolate: function() {},
+    mint: function() {},
+    greenTea: function() {},
+    vanilla: function() {}
+    };
+    
+    var flavors, temp;
+    var gui = new dat.GUI();
+    flavors = gui.addFolder('Ice Cream Flavors');
+    flavors.add(effectController, 'strawberry').name("Strawberry");
+    flavors.add(effectController, 'chocolate').name("Chocolate");
+    flavors.add(effectController, 'mint').name("Mint");
+    flavors.add(effectController, 'greenTea').name("Green Tea");
+    flavors.add(effectController, 'vanilla').name("Vanilla");
+    flavors.open();
 
-      //temp: if we want to add a second wave of drops somehow
-      effectController2 = {
-        material: "liquid",
-        speed: 0.05,
-        numBlobs: 5,
-        resolution: 28,
-        isolation: 80,
-        floor: false,
-        ceil: false,
-        wallx: false,
-        wallz: false,
-        hue: 0.0,
-        saturation: 0.8,
-        lightness: 0.1,
-        lhue: 0.04,
-        lsaturation: 1.0,
-        llightness: 0.5,
-        lx: 0.5,
-        ly: 0.5,
-        lz: 1.0,
-        dummy: function () {}
-      };
-    }
+    // gui.add(effectController, 'temperature', 0, 120).name("Temperature");
+    gui.add(effectController, 'speed', 0, 20).name("Temperature");
+
+
+    //temp: if we want to add a second wave of drops somehow
+    effectController2 = {
+      material: "liquid",
+      speed: 0.05,
+      numBlobs: 5,
+      resolution: 28,
+      isolation: 80,
+      // floor: false,
+      // ceil: false,
+      // wallx: false,
+      // wallz: false,
+      hue: 0.0,
+      saturation: 0.0,
+      lightness: 0.5,
+      // lhue: 0.04,
+      // lsaturation: 1.0,
+      // llightness: 0.5,
+      // lx: 0.5,
+      // ly: 0.5,
+      // lz: 1.0,
+      dummy: function () {}
+    };
+  }
 
     //helper: update drops
     function updateCubes( object, time, numblobs, floor, ceil, wallx, wallz ) {
@@ -474,6 +491,7 @@ function render() {
   //metaball specific stuff
   var delta = clock.getDelta();
   // var delta2 = clock2.getDelta();
+  // time += delta * effectController.speed * 0.5 * effectController.temperature/50;
   time += delta * effectController.speed * 0.5;
 
   var overallTime = performance.now() * 0.0009;
