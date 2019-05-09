@@ -119,7 +119,7 @@ function init() {
     });
   cone_mat = new THREE.MeshPhongMaterial({    // Cone material
       map: texture3,
-      color: 0xe1c699,
+      color: 0x9f6934,
       transparent: false,
       bumpMap: texture3,
       bumpScale: 0.5
@@ -127,7 +127,7 @@ function init() {
 
   //DEFINE MATERIAL FOR DROPS
   dropMaterial = generateMaterials();
-  current_material = "liquid";
+  current_material = "strawberry";
 
   //Marching Cubes stuff
   resolution = 28;
@@ -185,17 +185,52 @@ function init() {
 //helper function: drop material generation
 function generateMaterials() {
       var materials = {
-        "liquid": {
-          m: new THREE.MeshLambertMaterial( { color: 0xe0ffe4, refractionRatio: 0.85 } ),
-          //m: icemat,
-          h: 0, s: 0, l: 1
-          //note: for the green color
-          //h: 128 s: 100 l: 94
-        }
+        // "liquid": {
+        //   // m: new THREE.MeshLambertMaterial( { color: 0xe0ffe4, refractionRatio: 0.85 } ),
+        //   m: icemat,
+        //   h: 0, s: 0, l: 1
+        //   //note: for the green color
+        //   //h: 128 s: 100 l: 94
+        // },
+        "strawberry": {
+          // m: new THREE.MeshLambertMaterial( { color: 0xff0000, refractionRatio: 0.85 } ),
+          // m: icemat,
+          m: new THREE.MeshPhongMaterial({      // Ice cream material
+              // map: texture3,
+              color: 0xF2ACB4,
+              transparent: false,
+              // bumpMap: texture1,
+              // bumpScale: 0.15,
+              // displacementMap: texture2,
+              // displacementScale: 0.02
+            })
+          // h: 0, s: 0.5, l: 1
+        },
+        "chocolate": {
+          // m: new THREE.MeshLambertMaterial( { color: 0xff0000, refractionRatio: 0.85 } ),
+          m: icemat,
+          h: 0, s: 0.5, l: 1
+        },
+        "vanilla": {
+          // m: new THREE.MeshLambertMaterial( { color: 0xff0000, refractionRatio: 0.85 } ),
+          m: icemat,
+          h: 0, s: 0.5, l: 1
+        },
+        "mint": {
+          // m: new THREE.MeshLambertMaterial( { color: 0xff0000, refractionRatio: 0.85 } ),
+          m: icemat,
+          h: 0, s: 0.5, l: 1
+        },
+        "green tea": {
+          // m: new THREE.MeshLambertMaterial( { color: 0xff0000, refractionRatio: 0.85 } ),
+          m: icemat,
+          h: 0, s: 0.5, l: 1
+        },
       };
       return materials;
   }
 
+// var strawberry = new THREE.MeshLambertMaterial( { color: 0xffffff, refractionRatio: 0.85 } );
 
 // Helper function: loads textures
 function loadTextures() {
@@ -386,11 +421,6 @@ function updateCubes( object, time, numblobs, floor, ceil, wallx, wallz ) {
   px = true;
   py = true;
   pz = true;
-  
-  if ( floor ) object.addPlaneY( 2, 12 );
-  if ( ceil ) object.addPlaneY(2, 12);
-  if ( wallz ) object.addPlaneZ( 2, 12 );
-  if ( wallx ) object.addPlaneX( 2, 12 );
 }
 
 
@@ -407,21 +437,24 @@ requestAnimationFrame(render);
 
 
 // GUI CODE
+sphere.setColor = function(color){
+  sphere.material.color.set(color);
+}
 
 //event controller and gui
 function setupGui() {
     var createHandler = function ( id ) {
     return function () {
       var mat_old = dropMaterial[ current_material ];
-      mat_old.h = m_h.getValue();
-      mat_old.s = m_s.getValue();
-      mat_old.l = m_l.getValue();
+      // mat_old.h = m_h.getValue();
+      // mat_old.s = m_s.getValue();
+      // mat_old.l = m_l.getValue();
       current_material = id;
       var mat = dropMaterial[ id ];
       effect.material = mat.m;
-      m_h.setValue( mat.h );
-      m_s.setValue( mat.s );
-      m_l.setValue( mat.l );
+      // m_h.setValue( mat.h );
+      // m_s.setValue( mat.s );
+      // m_l.setValue( mat.l );
       effect.enableUvs = ( current_material === "textured" ) ? true : false;
       effect.enableColors = ( current_material === "colors" || current_material === "multiColors" ) ? true : false;
     };
@@ -431,37 +464,35 @@ function setupGui() {
   //from MarchingCubes.js
   //radius = this.size * Math.sqrt( strength / subtract )
   effectController = {
-  // material: "liquid",
+    material: "strawberry",
     speed: 0.05,
     numBlobs: 5,
     resolution: 28,
     isolation: 80,
     
-    hue: 0.0,
-    saturation: 0.0,
+    hue: 0.980,
+    saturation: 0.50,
     lightness: 0.5,
     
     dummy: function () {},
     // CUSTOM SHADER - PLACEHOLDERS
-    strawberry: function() {},
-    chocolate: function() {},
-    mint: function() {},
-    greenTea: function() {},
-    vanilla: function() {}
+    // strawberry: function() {
+    //   // this.material = "strawberry";
+    //   icemat.style.color = 0xffffff;
+    // },
+    
     };
     
     var flavors, temp;
     var gui = new dat.GUI();
     flavors = gui.addFolder('Ice Cream Flavors');
-    flavors.add(effectController, 'strawberry').name("Strawberry");
-    flavors.add(effectController, 'chocolate').name("Chocolate");
-    flavors.add(effectController, 'mint').name("Mint");
-    flavors.add(effectController, 'greenTea').name("Green Tea");
-    flavors.add(effectController, 'vanilla').name("Vanilla");
+    // for ( var m in dropMaterial ) {
+    //   effectController[ m ] = createHandler( m );
+    //   flavors.add( effectController, m ).name( m );
+    // }
     flavors.open();
 
-    // gui.add(effectController, 'temperature', 0, 120).name("Temperature");
-    gui.add(effectController, 'speed', 0, 20).name("Temperature");
+    gui.add(effectController, 'speed', 0, 5, 0.05).name("Temperature");
 
 
     //temp: if we want to add a second wave of drops somehow
@@ -471,23 +502,15 @@ function setupGui() {
       numBlobs: 5,
       resolution: 28,
       isolation: 80,
-      // floor: false,
-      // ceil: false,
-      // wallx: false,
-      // wallz: false,
+
       hue: 0.0,
       saturation: 0.0,
       lightness: 0.5,
-      // lhue: 0.04,
-      // lsaturation: 1.0,
-      // llightness: 0.5,
-      // lx: 0.5,
-      // ly: 0.5,
-      // lz: 1.0,
       dummy: function () {}
     };
   }
 
+  
 
 
 </script>
