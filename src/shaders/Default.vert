@@ -2,17 +2,18 @@
 
 // Uniform variables are constant throughout the entire shader
 // execution. They are also read-only to enable parallelization.
-uniform mat4 u_model;
-uniform mat4 u_view_projection;
+
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
 
 // In a vertex shader, the "in" variables are read-only per-vertex 
 // properties. An example of this was shown in the rasterizer project, 
 // where each vertex had an associated "color" or "uv" value which we 
 // would later interpolate using barycentric coordinates.
-in vec4 in_position;
-in vec4 in_normal;
-in vec4 in_tangent;
-in vec2 in_uv;
+attribute vec4 position;
+attribute vec4 normal;
+attribute vec4 tangent;
+attribute vec2 uv;
 
 // In a vertex shader, the "out" variables are per-vertex properties
 // that are read/write. These properties allow us to communicate
@@ -33,12 +34,12 @@ void main() {
   // Here, we just apply the model's transformation to the various
   // per-vertex properties. That way, when the fragment shader reads
   // them, we already have the position in world-space.
-  v_position = u_model * in_position;
-  v_normal = normalize(u_model * in_normal);
-  v_uv = in_uv;
-  v_tangent = normalize(u_model * in_tangent);
+  v_position = u_model * position;
+  v_normal = normalize(modelViewMatrix * normal);
+  v_uv = uv;
+  v_tangent = normalize(modelViewMatrix * tangent);
   
   // The final screen-space location of this vertex which the
   // GPU's triangle rasterizer takes in.
-  gl_Position = u_view_projection * u_model * in_position;
+  gl_Position = projectionMatrix * modelViewMatrix * position;
 }
