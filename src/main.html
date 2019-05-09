@@ -148,7 +148,7 @@ function init() {
   var sphere_geometry = new THREE.SphereGeometry(0.1, 128, 128);
   var material = new THREE.MeshNormalMaterial();
   sphere = new THREE.Mesh(sphere_geometry, icemat);
-  sphere.position.y = 1.15;
+  sphere.position.y = 1.17;
   sphere.castShadow = true;
 
   // CONE MESH
@@ -246,16 +246,46 @@ function updateMelting() {
     //change the texture mapping
 
 
+    var num_vertices = sphere.geometry.vertices.length;
+
+
     // Rescale
     p.multiplyScalar(0.95 + -1.2 * 0.01 * noise.perlin3(k*p.x, k*p.y + time, k*p.z));
 
+
+
+    var mid_y = sphere.geometry.vertices[num_vertices / 2].y;
+
+   
+    if (i <= num_vertices / 2 && mid_y <= -0.1) {
+      p.z += 0.00015;
+      //p.multiplyScalar(0.99);
+    }
+    else if (i <= num_vertices / 1.75 && mid_y <= -0.2) {
+      p.z += 0.00015;
+      //p.multiplyScalar(0.98);
+    }
+    else if (i <= num_vertices / 1.5 && mid_y <= -0.3) {
+      p.z += 0.00015;
+      //p.multiplyScalar(0.96);
+    }
+    else if (i <= num_vertices / 1.25 && mid_y <= -0.4) {
+      p.z += 0.00015;
+      //p.multiplyScalar(0.92);
+    }
+
     
     // Deform sphere by "melting" sphere from top-down; reposition vertex
-    if (p.y > -0.75) {
+    if (p.y > -0.8) {
       //p.y -= 2 * 1/i;
-      p.y -= 5 * 1/i;
-      //p.z += 0.5 * 1/i;
+      p.y -= 7 * 1/i;
     }
+
+    if (i < sphere.geometry.vertices.length / 2) {
+      p.z += 0.35 * 1/i;
+      p.multiplyScalar(0.99);
+    }
+
 
   }
 
@@ -395,8 +425,10 @@ function updateCubes( object, time, numblobs, floor, ceil, wallx, wallz ) {
 // LOOP + RENDER
 function render() {
 
-updateMelting();
-updateDripping();
+if (sphere.geometry.faces.length > 1) {
+  updateMelting();
+  updateDripping();
+}
 renderer.render(scene, camera);
 requestAnimationFrame(render);
   
