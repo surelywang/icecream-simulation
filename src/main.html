@@ -451,7 +451,7 @@ requestAnimationFrame(render);
 
 // FUNCTION: SETUP GUI
 function setupGui() {
-  var createHandler = function ( id ) {
+    var createHandler = function ( id ) {
     return function () {
       var mat_old = dropMaterial[ current_material ];
       mat_old.h = m_h.getValue();
@@ -472,31 +472,39 @@ function setupGui() {
   //from MarchingCubes.js
   //radius = this.size * Math.sqrt( strength / subtract )
   effectController = {
-    material: "liquid",
+  // material: "liquid",
     speed: 0.05,
-    numBlobs: 3,
+    numBlobs: 5,
     resolution: 28,
     isolation: 80,
-    floor: false,
-    ceil: false,
-    wallx: false,
-    wallz: false,
     hue: 0.0,
-    saturation: 0.4,
-    lightness: 0.09,
-    lhue: 0.04,
-    lsaturation: 1.0,
-    llightness: 0.5,
-    lx: 0.5,
-    ly: 0.5,
-    lz: 1.0,
-    dummy: function () {}
-  };
-  //possibly unneeded (just for GUI?)
-  var h, m_h, m_s, m_l;
-  var gui = new dat.GUI();
+    saturation: 0.6,
+    lightness: 0.075,
+    
+    dummy: function () {},
+    // CUSTOM SHADER - PLACEHOLDERS
+    strawberry: function() {},
+    chocolate: function() {},
+    mint: function() {},
+    greenTea: function() {},
+    vanilla: function() {}
+    };
+    
+    var flavors, temp;
+    var gui = new dat.GUI();
+    flavors = gui.addFolder('Ice Cream Flavors');
+    flavors.add(effectController, 'strawberry').name("Strawberry");
+    flavors.add(effectController, 'chocolate').name("Chocolate");
+    flavors.add(effectController, 'mint').name("Mint");
+    flavors.add(effectController, 'greenTea').name("Green Tea");
+    flavors.add(effectController, 'vanilla').name("Vanilla");
+    flavors.open();
 
-}
+    // gui.add(effectController, 'temperature', 0, 120).name("Temperature");
+    gui.add(effectController, 'speed', 0, 20).name("Temperature");
+
+
+  }
 
 
 
