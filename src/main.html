@@ -207,20 +207,28 @@ function generateMaterials() {
           // m: new THREE.MeshLambertMaterial( { color: 0xff0000, refractionRatio: 0.85 } ),
           // m: icemat,
           m: new THREE.MeshPhongMaterial({      // Ice cream material
-              // map: texture3,
+              map: texture3,
               color: 0xF2ACB4,
               transparent: false,
-              // bumpMap: texture1,
-              // bumpScale: 0.15,
-              // displacementMap: texture2,
-              // displacementScale: 0.02
-            })
-          // h: 0, s: 0.5, l: 1
+              bumpMap: texture1,
+              bumpScale: 0.15,
+              displacementMap: texture2,
+              displacementScale: 0.02
+            }),
+          h: 0, s: 0.5, l: 1
         },
         "chocolate": {
           // m: new THREE.MeshLambertMaterial( { color: 0xff0000, refractionRatio: 0.85 } ),
-          m: icemat,
-          h: 0, s: 0.5, l: 1
+          m: new THREE.MeshPhongMaterial({      // Ice cream material
+              map: texture3,
+              color: 0xFFFFFF,
+              transparent: false,
+              bumpMap: texture1,
+              bumpScale: 0.15,
+              displacementMap: texture2,
+              displacementScale: 0.02
+            }),
+          h: 0, s: 0, l: 1
         },
         "vanilla": {
           // m: new THREE.MeshLambertMaterial( { color: 0xff0000, refractionRatio: 0.85 } ),
@@ -529,10 +537,10 @@ function setupGui() {
     var flavors, temp;
     var gui = new dat.GUI();
     flavors = gui.addFolder('Ice Cream Flavors');
-    // for ( var m in dropMaterial ) {
-    //   effectController[ m ] = createHandler( m );
-    //   flavors.add( effectController, m ).name( m );
-    // }
+    for ( var m in dropMaterial ) {
+      effectController[ m ] = createHandler( m );
+      flavors.add( effectController, m ).name( m );
+    }
     flavors.open();
 
     gui.add(effectController, 'speed', 0, 5, 0.05).name("Temperature");
