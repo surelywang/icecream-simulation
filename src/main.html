@@ -233,16 +233,6 @@ function generateIceCreamMaterials() {
           displacementScale: 0.06
         })
     },
-    // "mint": {
-    //   m: new THREE.MeshPhongMaterial({      // Ice cream material
-    //       map: textureMint,
-    //       transparent: false,
-    //       bumpMap: textureMint,
-    //       bumpScale: 0.15,
-    //       displacementMap: textureRasp,
-    //       displacementScale: 0.05
-    //     })
-    // },
     "mint": {
       m: new THREE.MeshPhongMaterial({      // Ice cream material
           map: textureMint,
@@ -281,17 +271,17 @@ function generateDripMaterials() {
         })
     },
     "drip mint": {
-      m: new THREE.MeshPhongMaterial({      // Ice cream material
+      m: new THREE.MeshLambertMaterial({      // Ice cream material
           color: 0xC9D393
         })
     },
     "drip vanilla": {
-      m: new THREE.MeshPhongMaterial({      // Ice cream material
+      m: new THREE.MeshLambertMaterial({      // Ice cream material
           color: 0xffffff
         })
     },
     "drip green tea": {
-      m: new THREE.MeshPhongMaterial({      // Ice cream material
+      m: new THREE.MeshLambertMaterial({      // Ice cream material
           color: 0x97ab3a
         })
     },
