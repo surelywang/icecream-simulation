@@ -219,8 +219,8 @@ function generateIceCreamMaterials() {
           transparent: false,
           bumpMap: textureChoc,
           bumpScale: 1,
-          displacementMap: textureVanilla,
-          displacementScale: 0.06
+          displacementMap: textureRasp,
+          displacementScale: 0.05
         })
     },
     "vanilla": {
@@ -313,11 +313,13 @@ function loadTextures() {
   textureStraw = loader.load('https://st.depositphotos.com/1541589/3913/i/950/depositphotos_39139799-stock-photo-strawberry-ice-cream.jpg');
   //chocolate
   textureChoc = loader.load('https://66.media.tumblr.com/ee776b0c9e494d112118723e145c8d92/tumblr_pr9qjgmJjr1uloonxo3_1280.png');
+    textureChoc2 = loader.load('https://st2.depositphotos.com/4278641/9233/i/950/depositphotos_92332494-stock-photo-chocolate-ice-cream-background.jpg');
   //vanilla
   textureVanilla = loader.load('https://media.istockphoto.com/photos/vanilla-bean-ice-cream-background-picture-id918184334?k=6&m=918184334&s=612x612&w=0&h=y-qLlKonbFeFm-l4yVKzV-fieHG7xofV5VlsgtprfdE=');
   //mint
   // textureMint = loader.load('https://66.media.tumblr.com/2f12d2ded529dbe45049208fafcf6c48/tumblr_pr9qjgmJjr1uloonxo4_540.png');
    textureMint = loader.load('http://3.bp.blogspot.com/-lc-znS5UGzg/Um_2aH2vytI/AAAAAAAAQPg/QovXqsaxf7A/s1600/3-DSC_3190.JPG');
+   textureMint2 = loader.load('https://www.krondc.com/wp-content/uploads/2016/07/mint-chocoloate-chip.jpg');
   //green tea
   textureGreenTea1 = loader.load('https://1.bp.blogspot.com/-wDFbkfBw0A4/U1MtNZRxNCI/AAAAAAAAcYI/0Psjl14hlVU/s1600/haagen-daz-green-tea-ice-cream-03.JPG');
   textureGreenTea2 = loader.load('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR25NP9-fIGRiZQlVpOasRPML3wOTtB6Rm0hTelEHr9EtyaOGSNHQ');
@@ -344,22 +346,21 @@ function updateMelting() {
     var num_vertices = sphere.geometry.vertices.length;
 
 
-    // Rescale
+    // Rescale + add subtle perlin noise
     p.multiplyScalar(0.95 + -1 * 0.0125 * noise.perlin3(k*p.x, k*p.y + time, k*p.z));
 
     var mid_y = sphere.geometry.vertices[num_vertices / 2].y;
-    // IDK #1 - DECIDE WHETHER OR NOT TO MULTIPLY BY EFFECTCONTROLLER.SPEED
     if (i <= num_vertices / 3 && mid_y <= -0.1) {
       p.z += 0.00025 * effectController.speed;
       p.multiplyScalar(0.98);
     }
-    else if (i <= num_vertices / 2.6 && mid_y <= -0.45) {
-      p.z += 0.00035 * effectController.speed;
-      p.multiplyScalar(0.97);
-    }
-    else if (i <= num_vertices / 2.4 && mid_y <= -0.6) {
+    else if (i <= num_vertices / 2 && mid_y <= -0.5) {
       p.z += 0.00025 * effectController.speed;
-      p.multiplyScalar(0.96);
+      p.multiplyScalar(0.99);
+    }
+    else if (i <= num_vertices && mid_y <= -0.6) {
+      p.z += 0.00025 * effectController.speed;
+      p.multiplyScalar(0.99);
     }
   
     
@@ -369,8 +370,6 @@ function updateMelting() {
     }
 
     if (i < sphere.geometry.vertices.length / 2) {
-      // p.z += 0.35 * 1/i;
-      // IDK #3
       p.z += 0.35 * 1/i * effectController.speed;
       p.multiplyScalar(0.99);
     }
