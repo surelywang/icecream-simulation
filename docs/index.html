@@ -28,12 +28,14 @@
 		<br>
 		<h2>Abstract</h2>
 		<h4>Our Proposal</h4>
-		<p>Our team desired to create an ice cream melting simulator that incorporated concepts from this course.  We utilized THREE.js and WebGL to construct our simulator.  We built upon basic vertex manipulation techniques to simulate melting while default metaballs were transformed to create drops.  Lastly, we built a GUI that would allow for users to manipulate the texture and melting speed of our ice cream.</p>
+		<p>Our team desired to create an ice cream melting simulator that incorporated concepts from this course.  We utilized THREE.js and WebGL to construct our simulator.  We built upon basic vertex manipulation techniques to simulate a melting scoop while default metaballs were transformed to create drops.  Texture mapping was used to add dimension and more realism to the ice cream simulated.  Lastly, we built a GUI that would allow for users to manipulate the texture and melting speed of our ice cream.</p>
 
 		<br>
 
 		<h2>Technical Approach</h2>
 		<h4>Implementation</h4>
+		<p>Our goal was to cleanly simulate a solid ice cream melting as there are not a ton of realistic ice cream simulators.  We decided to use Javascript and WebGL to push us out of our comfort zones.</p>
+
 		<p>Our original idea for creating an ice cream simulator was to implement mesh to particle and particle to mesh again after each time step of particle manipulation.  We also wanted to add extra toppings and types of ice cream that would react in their own ways to the temperature in the scene.  This proved to be too intensive for the scope and time deadline of the class and we thus decided to scale back a bit.</p>
 		<p>
 		After feedback from the TAs, we decided to focus on just the melting effect.  Instead of mesh to particle and back, using OpenGL and C++, we switched to particles and mesh manipulation in WebGL and THREE.js.
@@ -44,7 +46,7 @@
 		</p>
 
 		<p>
-		Moving on from there, we looked into both vertex and shader deformation, settling on a vertex manipulation approach.  For the drops, we discovered metadrops are a really great way simulate the liquid motion we were looking for.  For a nice final touch, we added a gui that would allow the user to switch ice cream flavors and 
+		Moving on from there, we looked into both vertex and shader deformation, settling on a vertex manipulation approach.  For the drops, we discovered metadrops are a really great way simulate the liquid motion we were looking for.  For a nice final touch, we added a gui that would allow the user to switch ice cream flavors and speed of the ice cream drops.
 		</p>
 
 		<h4>Problems and Solutions</h4>
