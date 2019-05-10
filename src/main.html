@@ -44,25 +44,31 @@
 var SW = window.innerWidth, SH = window.innerHeight;
 var scene = new THREE.Scene();	// scene
 var camera, renderer;			      // camera, render
+
 // FOR DRIPPING
 var container;
+
 // for effects
-var dropMaterial, current_material;
+var dropMaterial, current_material, dripMaterial;
 var effect, resolution;
 var effectController;
+
 // store previous x and y for drips
 var prevx, prevy, prevz;
 var prevx2, prevy2, prevz2;
 var px, py, pz;
 var px2, py2, pz2;
+
 // effect activators
 var e1;
+
 // time and clock stuff
 var time = 0;
 var clock = new THREE.Clock();
+
 // FOR MELTING
 var loader;                                  // Declare texture loader
-var texture1, texture2, coneTex, texture4;   // Declare textures
+var coneTex;   // Declare textures
 var ice_mat, cone_mat;                       // Declare mesh materials 
 var sphere, cone;                            // Declare objects
 
@@ -71,8 +77,6 @@ var sphere, cone;                            // Declare objects
 loadTextures();   // Load textures
 init();           // Initialize scene and declare objects
 render();         // Render scene
-
-
 
 // TODO:
 // Try to make icecream look more specular
@@ -133,12 +137,13 @@ function init() {
     });
 
   //DEFINE MATERIAL FOR DROPS
-  dropMaterial = generateMaterials();   // initialize all materials too
+  dropMaterial = generateIceCreamMaterials();   // initialize all materials too
+  dripMaterial = generateDripMaterials();
   current_material = "drip strawberry";
 
   // MARCHING CUBES
   resolution = 32;
-  effect = new THREE.MarchingCubes(resolution, dropMaterial[ current_material ].m, true, true );
+  effect = new THREE.MarchingCubes(resolution, dripMaterial[ current_material ].m, true, true );
   effect.material.color.setHSL(0.0372, 0.527, 0.6);
   effect.position.set( 0, -0.29, 3 );
   effect.scale.set( 0.4, 0.9, 1 );
@@ -183,19 +188,17 @@ function init() {
   cone.geometry.computeVertexNormals(true);
   cone.castShadow = true;
 
-
   // ------- ADD OBJECTS TO SCENE -------
   scene.add(cone);
   scene.add(sphere);
 
   // SETUP GUI
   setupGui();
-
 }
 
 
 // DEFINE MATERIALS + RETURNS MATERIAL OF DROPS
-function generateMaterials() {
+function generateIceCreamMaterials() {
       var materials = {
         "strawberry": {
           
@@ -205,7 +208,7 @@ function generateMaterials() {
               bumpMap: textureStraw,
               bumpScale: 0.15,
               displacementMap: textureStraw,
-              displacementScale: 0.02
+              displacementScale: 0.02,
             })
         },
         "chocolate": {
@@ -247,35 +250,43 @@ function generateMaterials() {
               displacementMap: textureGreenTea2,
               displacementScale: 0.02
             })
-        },
-        "drip strawberry": {
-          m: new THREE.MeshLambertMaterial({      // Ice cream material
-              color: 0xF2ACB4
-            })
-        },
-        "drip chocolate": {
-          m: new THREE.MeshLambertMaterial({      // Ice cream material
-              color: 0xe7b293
-            })
-        },
-        "drip mint": {
-          m: new THREE.MeshPhongMaterial({      // Ice cream material
-              color: 0xC9D393
-            })
-        },
-        "drip vanilla": {
-          m: new THREE.MeshPhongMaterial({      // Ice cream material
-              color: 0xffffff
-            })
-        },
-        "drip green tea": {
-          m: new THREE.MeshPhongMaterial({      // Ice cream material
-              color: 0x97ab3a
-            })
-        },
-      };
+        }
+      }
       return materials;
-  }
+    }
+
+function generateDripMaterials() {
+  var dripMaterial = {
+    "drip strawberry": {
+      m: new THREE.MeshLambertMaterial({      // Ice cream material
+          color: 0xF2ACB4
+        })
+    },
+    "drip chocolate": {
+      m: new THREE.MeshLambertMaterial({      // Ice cream material
+          color: 0xe7b293
+        })
+    },
+    "drip mint": {
+      m: new THREE.MeshPhongMaterial({      // Ice cream material
+          color: 0xC9D393
+        })
+    },
+    "drip vanilla": {
+      m: new THREE.MeshPhongMaterial({      // Ice cream material
+          color: 0xffffff
+        })
+    },
+    "drip green tea": {
+      m: new THREE.MeshPhongMaterial({      // Ice cream material
+          color: 0x97ab3a
+        })
+    },
+  };
+  return dripMaterial;
+}
+
+      // return materials;
 
 // LOAD TEXTURES
 function loadTextures() {
@@ -498,19 +509,19 @@ function setupGui() {
       var mat = dropMaterial[ id ];
 
       if (id == "strawberry") {
-        effect.material = dropMaterial["drip strawberry"].m;
+        effect.material = dripMaterial["drip strawberry"].m;
         effect.material.color.setHSL(0.0372, 0.527, 0.6);
       } else if (id == "chocolate") {
-        effect.material = dropMaterial["drip chocolate"].m;
+        effect.material = dripMaterial["drip chocolate"].m;
         effect.material.color.setHSL(0.0313, 0.7, 0.2);
       } else if (id == "vanilla") {
-        effect.material = dropMaterial["drip vanilla"].m;
+        effect.material = dripMaterial["drip vanilla"].m;
         effect.material.color.setHSL(0.1191, 0.538, 0.673);
       } else if (id == "mint") {
-        effect.material = dropMaterial["drip mint"].m;
+        effect.material = dripMaterial["drip mint"].m;
         effect.material.color.setHSL(0.1927, 0.421, 0.502);
       } else if (id == "green tea") {
-        effect.material = dropMaterial["drip green tea"].m;
+        effect.material = dripMaterial["drip green tea"].m;
         effect.material.color.setHSL(0.1961, 0.493, 0.449);
       }
 
@@ -528,14 +539,13 @@ function setupGui() {
       }
 
       effect.enableUvs = ( current_material === "textured" ) ? true : false;
-      effect.enableColors = ( current_material === "colors" || current_material === "multiColors" ) ? true : false;
     };
   };
   //NOTE:
   //resolution, strength, and subtract(see update cube) impact radius
   //from MarchingCubes.js
   effectController = {
-    speed: 0.05,
+    speed: 0.15,
     numBlobs: 5,
     resolution: 28,
     isolation: 80,
@@ -543,6 +553,32 @@ function setupGui() {
     hue: 0.0372,
     saturation: 0.527,
     lightness: 0.784,
+
+    restart: function() {
+      // var selectedObject = scene.getObjectByName(sphere);
+      scene.remove(sphere);
+      selectedObject = scene.getObjectByName(effect);
+      scene.remove(effect);
+
+      sphere_geometry = new THREE.SphereGeometry(0.1, 128, 128);
+      material = new THREE.MeshNormalMaterial();
+      sphere = new THREE.Mesh(sphere_geometry, icemat);
+      sphere.material.color.setHSL(0.0372, 0.527, 0.784);
+      sphere.position.y = 1.17;
+      sphere.castShadow = true;
+
+      scene.add(sphere);
+
+      current_material = "drip strawberry";
+
+      effect = new THREE.MarchingCubes(resolution, dripMaterial[ current_material ].m, true, true );
+      effect.material.color.setHSL(0.0372, 0.527, 0.6);
+      effect.position.set( 0, -0.29, 3 );
+      effect.scale.set( 0.4, 0.9, 1 );
+      effect.enableUvs = false;
+      effect.enableColors = false;
+      scene.add( effect );
+    },
     
     dummy: function () {},
   };
@@ -558,10 +594,8 @@ function setupGui() {
 
     gui.add(effectController, 'speed', 0, 5, 0.05).name("Temperature");
 
+    gui.add(effectController, 'restart').name("Restart");
   }
-
-  
-
 
 </script>
 </body>
