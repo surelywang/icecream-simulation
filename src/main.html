@@ -62,7 +62,7 @@ var time = 0;
 var clock = new THREE.Clock();
 // FOR MELTING
 var loader;                                  // Declare texture loader
-var texture1, texture2, texture3, texture4;   // Declare textures
+var texture1, texture2, coneTex, texture4;   // Declare textures
 var ice_mat, cone_mat;                       // Declare mesh materials 
 var sphere, cone;                            // Declare objects
 
@@ -126,10 +126,10 @@ function init() {
       displacementScale: 0.02
     });
   cone_mat = new THREE.MeshPhongMaterial({    // Cone material
-      map: texture3,
+      map: coneTex,
       color: 0x9f6934,
       transparent: false,
-      bumpMap: texture3,
+      bumpMap: coneTex,
       bumpScale: 0.5
     });
 
@@ -196,54 +196,70 @@ function init() {
 // DEFINE MATERIALS + RETURNS MATERIAL OF DROPS
 function generateMaterials() {
       var materials = {
-        // "liquid": {
-        //   // m: new THREE.MeshLambertMaterial( { color: 0xe0ffe4, refractionRatio: 0.85 } ),
-        //   m: icemat,
-        //   h: 0, s: 0, l: 1
-        //   //note: for the green color
-        //   //h: 128 s: 100 l: 94
-        // },
         "strawberry": {
-          // m: new THREE.MeshLambertMaterial( { color: 0xff0000, refractionRatio: 0.85 } ),
-          // m: icemat,
+          
           m: new THREE.MeshPhongMaterial({      // Ice cream material
-              map: texture3,
+              map: textureStraw,
               color: 0xF2ACB4,
               transparent: false,
-              bumpMap: texture1,
+              bumpMap: textureStraw,
               bumpScale: 0.15,
-              displacementMap: texture2,
+              displacementMap: textureStraw,
               displacementScale: 0.02
             }),
-          h: 0, s: 0.5, l: 1
+          // h: 0, s: 0.5, l: 1
         },
         "chocolate": {
           // m: new THREE.MeshLambertMaterial( { color: 0xff0000, refractionRatio: 0.85 } ),
           m: new THREE.MeshPhongMaterial({      // Ice cream material
-              map: texture3,
+              map: textureChoc,
               color: 0xFFFFFF,
               transparent: false,
-              bumpMap: texture1,
+              bumpMap: textureChoc,
               bumpScale: 0.15,
-              displacementMap: texture2,
+              displacementMap: textureChoc,
               displacementScale: 0.02
             }),
           h: 0, s: 0, l: 1
         },
         "vanilla": {
           // m: new THREE.MeshLambertMaterial( { color: 0xff0000, refractionRatio: 0.85 } ),
-          m: icemat,
-          h: 0, s: 0.5, l: 1
+          m: new THREE.MeshPhongMaterial({      // Ice cream material
+              map: textureVanilla,
+              color: 0xFFFFFF,
+              transparent: false,
+              bumpMap: textureVanilla,
+              bumpScale: 0.15,
+              displacementMap: textureVanilla,
+              displacementScale: 0.02
+            }),
+          h: 0, s: 0, l: 1
         },
         "mint": {
           // m: new THREE.MeshLambertMaterial( { color: 0xff0000, refractionRatio: 0.85 } ),
-          m: icemat,
-          h: 0, s: 0.5, l: 1
+          m: new THREE.MeshPhongMaterial({      // Ice cream material
+              map: textureMint,
+              color: 0xFFFFFF,
+              transparent: false,
+              bumpMap: textureMint,
+              bumpScale: 0.15,
+              displacementMap: textureMint,
+              displacementScale: 0.02
+            }),
+          h: 0, s: 0, l: 1
         },
         "green tea": {
           // m: new THREE.MeshLambertMaterial( { color: 0xff0000, refractionRatio: 0.85 } ),
-          m: icemat,
-          h: 0, s: 0.5, l: 1
+          m: new THREE.MeshPhongMaterial({      // Ice cream material
+              map: textureGreenTea1,
+              color: 0xFFFFFF,
+              transparent: false,
+              bumpMap: textureGreenTea1,
+              bumpScale: 0.15,
+              displacementMap: textureGreenTea2,
+              displacementScale: 0.02
+            }),
+          h: 0, s: 0, l: 1
         },
       };
       return materials;
@@ -258,12 +274,21 @@ function loadTextures() {
     loader.crossOrigin = "";
 
   // var texture1 = loader.load('https://dairystore.unl.edu/images/IceCreamswatch/120508_Strawberry_Cheesecake_007.jpg');
-  texture1 = loader.load('https://1.bp.blogspot.com/-wDFbkfBw0A4/U1MtNZRxNCI/AAAAAAAAcYI/0Psjl14hlVU/s1600/haagen-daz-green-tea-ice-cream-03.JPG');
-  texture2 = loader.load('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR25NP9-fIGRiZQlVpOasRPML3wOTtB6Rm0hTelEHr9EtyaOGSNHQ');
-  texture3 = loader.load("https://st.depositphotos.com/1003495/1932/i/950/depositphotos_19328199-stock-photo-wafer-texture.jpg");
-    texture3.wrapS = THREE.RepeatWrapping;
-    texture3.wrapT = THREE.RepeatWrapping;
-    texture4 = loader.load('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGVtyLH5YjAK0MDfe-esJbRY0Rev2Oe6aOGSo7XPhcZaOiyRVbIQ');
+  coneTex = loader.load("https://st.depositphotos.com/1003495/1932/i/950/depositphotos_19328199-stock-photo-wafer-texture.jpg");
+  coneTex.wrapS = THREE.RepeatWrapping;
+  coneTex.wrapT = THREE.RepeatWrapping;
+  //original ice cream textures
+  //strawberry
+  textureStraw = loader.load('https://66.media.tumblr.com/073c1da118407112f44c625a022b286c/tumblr_pr9qjgmJjr1uloonxo2_1280.png');
+  //chocolate
+  textureChoc = loader.load('https://66.media.tumblr.com/ee776b0c9e494d112118723e145c8d92/tumblr_pr9qjgmJjr1uloonxo3_1280.png');
+  //vanilla
+  textureVanilla = loader.load('https://66.media.tumblr.com/9f27ea094258a7b347788c096f2e67e7/tumblr_pr9qjgmJjr1uloonxo1_540.png');
+  //mint
+  textureMint = loader.load('https://66.media.tumblr.com/2f12d2ded529dbe45049208fafcf6c48/tumblr_pr9qjgmJjr1uloonxo4_540.png');
+  //green tea
+  textureGreenTea1 = loader.load('https://1.bp.blogspot.com/-wDFbkfBw0A4/U1MtNZRxNCI/AAAAAAAAcYI/0Psjl14hlVU/s1600/haagen-daz-green-tea-ice-cream-03.JPG');
+  textureGreenTea2 = loader.load('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR25NP9-fIGRiZQlVpOasRPML3wOTtB6Rm0hTelEHr9EtyaOGSNHQ');
 
 }
 
@@ -497,15 +522,12 @@ function setupGui() {
     var createHandler = function ( id ) {
     return function () {
       var mat_old = dropMaterial[ current_material ];
-      // mat_old.h = m_h.getValue();
-      // mat_old.s = m_s.getValue();
-      // mat_old.l = m_l.getValue();
+
       current_material = id;
       var mat = dropMaterial[ id ];
       effect.material = mat.m;
-      // m_h.setValue( mat.h );
-      // m_s.setValue( mat.s );
-      // m_l.setValue( mat.l );
+      sphere.material = mat.m;
+
       effect.enableUvs = ( current_material === "textured" ) ? true : false;
       effect.enableColors = ( current_material === "colors" || current_material === "multiColors" ) ? true : false;
     };
