@@ -134,11 +134,12 @@ function init() {
 
   //DEFINE MATERIAL FOR DROPS
   dropMaterial = generateMaterials();   // initialize all materials too
-  current_material = "strawberry";
+  current_material = "drip strawberry";
 
   // MARCHING CUBES
-  resolution = 28;
+  resolution = 32;
   effect = new THREE.MarchingCubes(resolution, dropMaterial[ current_material ].m, true, true );
+  effect.material.color.setHSL(0.0372, 0.527, 0.6);
   effect.position.set( 0, -0.29, 3 );
   effect.scale.set( 0.4, 0.9, 1 );
   effect.enableUvs = false;
@@ -170,6 +171,7 @@ function init() {
   var sphere_geometry = new THREE.SphereGeometry(0.1, 128, 128);
   var material = new THREE.MeshNormalMaterial();
   sphere = new THREE.Mesh(sphere_geometry, icemat);
+  sphere.material.color.setHSL(0.0372, 0.527, 0.784);
   sphere.position.y = 1.17;
   sphere.castShadow = true;
 
@@ -205,7 +207,6 @@ function generateMaterials() {
               displacementMap: textureStraw,
               displacementScale: 0.02
             })
-          // effectController.saturation: 0.50
         },
         "chocolate": {
           m: new THREE.MeshPhongMaterial({      // Ice cream material
@@ -402,13 +403,6 @@ function updateDripping() {
     }
 
     updateCubes( effect, time, effectController.numBlobs, effectController.floor, effectController.ceil, effectController.wallx, effectController.wallz );
-      
-      // materials
-      // if ( effect.material instanceof THREE.ShaderMaterial ) {
-      //   effect.material.uniforms[ "uBaseColor" ].value.setHSL( effectController.hue, effectController.saturation, effectController.lightness );
-      // } else {
-      //   effect.material.color.setHSL( effectController.hue, effectController.saturation, effectController.lightness );
-      // }
 }
 
 
@@ -421,15 +415,6 @@ function updateCubes( object, time, numblobs, floor, ceil, wallx, wallz ) {
   ballx = Math.random();
   bally = 1;
   ballz = 0;
-  var rainbow = [
-      new THREE.Color(0xff0000),
-      new THREE.Color(0xff7f00),
-      new THREE.Color(0xffff00),
-      new THREE.Color(0x00ff00),
-      new THREE.Color(0x0000ff),
-      new THREE.Color(0x4b0082),
-      new THREE.Color(0x9400d3)
-    ];
   //add gravity stuff for realistic drip
   //var force = 9.8; //earth gravity force
   //notes on subtract
@@ -511,7 +496,7 @@ function setupGui() {
     return function () {
       current_material = id;
       var mat = dropMaterial[ id ];
-      // effect.material = dropMaterial["drip"].m;
+
       if (id == "strawberry") {
         effect.material = dropMaterial["drip strawberry"].m;
         effect.material.color.setHSL(0.0372, 0.527, 0.6);
@@ -528,8 +513,8 @@ function setupGui() {
         effect.material = dropMaterial["drip green tea"].m;
         effect.material.color.setHSL(0.1961, 0.493, 0.449);
       }
-      sphere.material = mat.m;
 
+      sphere.material = mat.m;
       if (id == "strawberry") {
         sphere.material.color.setHSL(0.0372, 0.527, 0.784);
       } else if (id == "chocolate") {
@@ -555,28 +540,18 @@ function setupGui() {
     resolution: 28,
     isolation: 80,
     
-    // hue: 1.0,
-    // saturation: 0.0,
-    // lightness: 0.75,
+    hue: 0.0372,
+    saturation: 0.527,
+    lightness: 0.784,
     
     dummy: function () {},
-    };
-    
-    changeSat = function (m) {
-      if (m == "strawberry") {
-        effectController.saturation = 0.5;
-      }
-      if (m == "chocolate") {
-        effectController.saturation = 0.95;
-      }
-    }
+  };
 
     var flavors, temp;
     var gui = new dat.GUI();
     flavors = gui.addFolder('Ice Cream Flavors');
     for ( var m in dropMaterial ) {
       effectController[ m ] = createHandler( m );
-      // flavors.add( effectController, m ).name( m ).onChange(changeSat(m));
       flavors.add( effectController, m ).name( m );
     }
     flavors.open();
