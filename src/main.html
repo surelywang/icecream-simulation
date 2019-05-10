@@ -199,61 +199,61 @@ function init() {
 
 // DEFINE MATERIALS + RETURNS MATERIAL OF DROPS
 function generateIceCreamMaterials() {
-      var materials = {
-        "strawberry": {
-          
-          m: new THREE.MeshPhongMaterial({      // Ice cream material
-              map: textureStraw,
-              transparent: false,
-              bumpMap: textureStraw,
-              bumpScale: 0.15,
-              displacementMap: textureStraw,
-              displacementScale: 0.02,
-            })
-        },
-        "chocolate": {
-          m: new THREE.MeshPhongMaterial({      // Ice cream material
-              map: textureChoc,
-              transparent: false,
-              bumpMap: textureChoc,
-              bumpScale: 0.15,
-              displacementMap: textureChoc,
-              displacementScale: 0.02
-            })
-        },
-        "vanilla": {
-          m: new THREE.MeshPhongMaterial({      // Ice cream material
-              map: textureVanilla,
-              transparent: false,
-              bumpMap: textureVanilla,
-              bumpScale: 0.15,
-              displacementMap: textureVanilla,
-              displacementScale: 0.02
-            })
-        },
-        "mint": {
-          m: new THREE.MeshPhongMaterial({      // Ice cream material
-              map: textureMint,
-              transparent: false,
-              bumpMap: textureMint,
-              bumpScale: 0.15,
-              displacementMap: textureMint,
-              displacementScale: 0.02
-            })
-        },
-        "green tea": {
-          m: new THREE.MeshPhongMaterial({      // Ice cream material
-              map: textureGreenTea1,
-              transparent: false,
-              bumpMap: textureGreenTea1,
-              bumpScale: 0.15,
-              displacementMap: textureGreenTea2,
-              displacementScale: 0.02
-            })
-        }
-      }
-      return materials;
+  var materials = {
+    "strawberry": {
+      
+      m: new THREE.MeshPhongMaterial({      // Ice cream material
+          map: textureStraw,
+          transparent: false,
+          bumpMap: textureStraw,
+          bumpScale: 0.15,
+          displacementMap: textureStraw,
+          displacementScale: 0.02,
+        })
+    },
+    "chocolate": {
+      m: new THREE.MeshPhongMaterial({      // Ice cream material
+          map: textureChoc,
+          transparent: false,
+          bumpMap: textureChoc,
+          bumpScale: 0.15,
+          displacementMap: textureChoc,
+          displacementScale: 0.02
+        })
+    },
+    "vanilla": {
+      m: new THREE.MeshPhongMaterial({      // Ice cream material
+          map: textureVanilla,
+          transparent: false,
+          bumpMap: textureVanilla,
+          bumpScale: 0.15,
+          displacementMap: textureVanilla,
+          displacementScale: 0.02
+        })
+    },
+    "mint": {
+      m: new THREE.MeshPhongMaterial({      // Ice cream material
+          map: textureMint,
+          transparent: false,
+          bumpMap: textureMint,
+          bumpScale: 0.15,
+          displacementMap: textureMint,
+          displacementScale: 0.02
+        })
+    },
+    "green tea": {
+      m: new THREE.MeshPhongMaterial({      // Ice cream material
+          map: textureGreenTea1,
+          transparent: false,
+          bumpMap: textureGreenTea1,
+          bumpScale: 0.15,
+          displacementMap: textureGreenTea2,
+          displacementScale: 0.02
+        })
     }
+  }
+  return materials;
+}
 
 function generateDripMaterials() {
   var dripMaterial = {
@@ -285,8 +285,6 @@ function generateDripMaterials() {
   };
   return dripMaterial;
 }
-
-      // return materials;
 
 // LOAD TEXTURES
 function loadTextures() {
@@ -343,33 +341,36 @@ function updateMelting() {
 
     var mid_y = sphere.geometry.vertices[num_vertices / 2].y;
 
-   
+    // IDK #1 - DECIDE WHETHER OR NOT TO MULTIPLY BY EFFECTCONTROLLER.SPEED
     if (i <= num_vertices / 2 && mid_y <= -0.1) {
-      p.z += 0.00015;
+      p.z += 0.00015 * effectController.speed;
       //p.multiplyScalar(0.99);
     }
     else if (i <= num_vertices / 1.75 && mid_y <= -0.2) {
-      p.z += 0.00015;
+      p.z += 0.00015 * effectController.speed;
       //p.multiplyScalar(0.98);
     }
     else if (i <= num_vertices / 1.5 && mid_y <= -0.3) {
-      p.z += 0.00015;
+      p.z += 0.00015 * effectController.speed;
       //p.multiplyScalar(0.96);
     }
     else if (i <= num_vertices / 1.25 && mid_y <= -0.4) {
-      p.z += 0.00015;
+      p.z += 0.00015 * effectController.speed;
       //p.multiplyScalar(0.92);
     }
-
     
     // Deform sphere by "melting" sphere from top-down; reposition vertex
     if (p.y > -0.8) {
       //p.y -= 2 * 1/i;
-      p.y -= 7 * 1/i;
+      // p.y -= 7 * 1/i;
+      // IDK #2
+      p.y -= 7 * 1/i * effectController.speed;
     }
 
     if (i < sphere.geometry.vertices.length / 2) {
-      p.z += 0.35 * 1/i;
+      // p.z += 0.35 * 1/i;
+      // IDK #3
+      p.z += 0.35 * 1/i * effectController.speed;
       p.multiplyScalar(0.99);
     }
 
@@ -390,7 +391,6 @@ function updateMelting() {
 function updateDripping() {
   //metaball specific stuff
   var delta = clock.getDelta();
-  // var delta2 = clock2.getDelta();
   time += delta * effectController.speed * 0.5;
 
   var overallTime = performance.now() * 0.0009;
@@ -594,7 +594,7 @@ function setupGui() {
 
     gui.add(effectController, 'speed', 0, 5, 0.05).name("Temperature");
 
-    gui.add(effectController, 'restart').name("Restart");
+    gui.add(effectController, 'restart').name("Another scoop!");
   }
 
 </script>
