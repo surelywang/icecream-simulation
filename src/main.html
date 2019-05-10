@@ -43,7 +43,7 @@
 // SCENE SETUP
 var SW = window.innerWidth, SH = window.innerHeight;
 var scene = new THREE.Scene();	// scene
-var camera, renderer;			      // camera, render
+var camera, center, renderer;			      // camera, render
 
 // FOR DRIPPING
 var container;
@@ -77,15 +77,6 @@ var sphere, cone;                            // Declare objects
 loadTextures();   // Load textures
 init();           // Initialize scene and declare objects
 render();         // Render scene
-
-// TODO:
-// Try to make icecream look more specular
-// import project code for phong? glsl
-
-// Melting: have sphere shrink inwards
-// Have UV mapping move downwards with icecream?
-
-
 
 
 // FUNCTION: INTIALIZE SCENE
@@ -128,7 +119,7 @@ function init() {
       bumpMap: textureStraw,
       bumpScale: 0.25,
       displacementMap: textureStraw2,
-      displacementScale: 0.05
+      displacementScale: 0.055
     });
   cone_mat = new THREE.MeshPhongMaterial({    // Cone material
       map: coneTex,
@@ -170,8 +161,6 @@ function init() {
   py2 = false;
   pz2 = false;
   e1 = true;    // activate first effect
-  e2 = false;   // deactivate second effect
-
 
   // ------- DEFINE MESHES -------
 
@@ -182,6 +171,7 @@ function init() {
   sphere.material.color.setHSL(0.0372, 0.527, 0.784);
   sphere.position.y = 1.17;
   sphere.castShadow = true;
+  sphere.enableUvs = true;
 
   // CONE MESH
   var cone_geo = new THREE.ConeGeometry(0.7, 2.5, 10);
@@ -190,6 +180,7 @@ function init() {
   cone.position.y = -.75;
   cone.geometry.computeVertexNormals(true);
   cone.castShadow = true;
+  cone.enableUVs = true;
 
   // ------- ADD OBJECTS TO SCENE -------
   scene.add(cone);
@@ -210,7 +201,7 @@ function generateIceCreamMaterials() {
           bumpMap: textureStraw,
           bumpScale: 0.25,
           displacementMap: textureStraw2,
-          displacementScale: 0.05
+          displacementScale: 0.055
         })
     },
     "chocolate": {
@@ -220,7 +211,7 @@ function generateIceCreamMaterials() {
           bumpMap: textureChoc,
           bumpScale: 1,
           displacementMap: textureRasp,
-          displacementScale: 0.05
+          displacementScale: 0.055
         })
     },
     "vanilla": {
@@ -230,7 +221,7 @@ function generateIceCreamMaterials() {
           bumpMap: textureGreenTea1,
           bumpScale: 0.15,
           displacementMap: textureVanilla,
-          displacementScale: 0.06
+          displacementScale: 0.055
         })
     },
     // "mint": {
@@ -250,7 +241,7 @@ function generateIceCreamMaterials() {
           bumpMap: textureGreenTea1,
           bumpScale: 0.25,
           displacementMap: textureRasp,
-          displacementScale: 0.05
+          displacementScale: 0.055
         })
     },
     "green tea": {
@@ -261,7 +252,7 @@ function generateIceCreamMaterials() {
           bumpMap: textureGreenTea1,
           bumpScale: 0.15,
           displacementMap: textureVanilla,
-          displacementScale: 0.05
+          displacementScale: 0.055
         })
     }
   }
@@ -313,7 +304,7 @@ function loadTextures() {
   textureStraw = loader.load('https://st.depositphotos.com/1541589/3913/i/950/depositphotos_39139799-stock-photo-strawberry-ice-cream.jpg');
   //chocolate
   textureChoc = loader.load('https://66.media.tumblr.com/ee776b0c9e494d112118723e145c8d92/tumblr_pr9qjgmJjr1uloonxo3_1280.png');
-    textureChoc2 = loader.load('https://st2.depositphotos.com/4278641/9233/i/950/depositphotos_92332494-stock-photo-chocolate-ice-cream-background.jpg');
+  textureChoc2 = loader.load('https://st2.depositphotos.com/4278641/9233/i/950/depositphotos_92332494-stock-photo-chocolate-ice-cream-background.jpg');
   //vanilla
   textureVanilla = loader.load('https://media.istockphoto.com/photos/vanilla-bean-ice-cream-background-picture-id918184334?k=6&m=918184334&s=612x612&w=0&h=y-qLlKonbFeFm-l4yVKzV-fieHG7xofV5VlsgtprfdE=');
   //mint
@@ -345,22 +336,21 @@ function updateMelting() {
     // check if you can retrieve mesh normals
     var num_vertices = sphere.geometry.vertices.length;
 
-
     // Rescale + add subtle perlin noise
-    p.multiplyScalar(0.95 + -1 * 0.0125 * noise.perlin3(k*p.x, k*p.y + time, k*p.z));
+    p.multiplyScalar(0.95 + -1 * 0.02 * noise.perlin3(k*p.x, k*p.y + time*effectController.speed, k*p.z));
 
     var mid_y = sphere.geometry.vertices[num_vertices / 2].y;
     if (i <= num_vertices / 3 && mid_y <= -0.1) {
-      p.z += 0.00025 * effectController.speed;
-      p.multiplyScalar(0.98);
+      p.z += 0.025 * 1/i * effectController.speed;
+      p.multiplyScalar(0.99);
     }
     else if (i <= num_vertices / 2 && mid_y <= -0.5) {
-      p.z += 0.00025 * effectController.speed;
-      p.multiplyScalar(0.99);
+      p.z += 0.00005 * effectController.speed;
+      //p.multiplyScalar(0.99);
     }
-    else if (i <= num_vertices && mid_y <= -0.6) {
-      p.z += 0.00025 * effectController.speed;
-      p.multiplyScalar(0.99);
+    else if (i <= num_vertices / 2 && mid_y <= -0.6) {
+      p.z += 0.00005 * effectController.speed;
+      //p.multiplyScalar(0.99);
     }
   
     
@@ -371,7 +361,7 @@ function updateMelting() {
 
     if (i < sphere.geometry.vertices.length / 2) {
       p.z += 0.35 * 1/i * effectController.speed;
-      p.multiplyScalar(0.99);
+      //p.multiplyScalar(0.99);
     }
 
 
@@ -457,7 +447,7 @@ function updateCubes( object, time, numblobs, floor, ceil, wallx, wallz ) {
 
         if (bally < 0) {
           //melt
-          bally = -0.5 * time;
+          bally = -0.1 * time;
         }
 
         //update prev array values
@@ -472,7 +462,8 @@ function updateCubes( object, time, numblobs, floor, ceil, wallx, wallz ) {
 
         prevx[i] = ballx;
         prevy[i] = bally;
-        prevz[i] = ballz;         
+        prevz[i] = ballz;  
+
       }
     
     object.addBall( ballx, bally, ballz, strength, subtract );
@@ -492,6 +483,7 @@ if (sphere.geometry.faces.length > 1) {
   updateMelting();
   updateDripping();
 }
+
 renderer.render(scene, camera);
 requestAnimationFrame(render);
   
