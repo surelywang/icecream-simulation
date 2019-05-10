@@ -93,11 +93,13 @@ function init() {
 
 	// ------- SET CAMERA -------
 	camera = new THREE.PerspectiveCamera(60, SW / SH, 0.1, 1000);
-  camera.position.set(0, 0.25, 6);
+  camera.position.set(0, 0.5, 6);
   //camera.position.z = 5;
 
   // ------- SET RENDERER -------
-	renderer = new THREE.WebGLRenderer({ antialias: true });
+	renderer = new THREE.WebGLRenderer({
+    antialias: true
+  });
   renderer.gammaOutput = true;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -343,33 +345,27 @@ function updateMelting() {
 
 
     // Rescale
-    p.multiplyScalar(0.95 + -1 * 0.01 * noise.perlin3(k*p.x, k*p.y + time, k*p.z));
+    p.multiplyScalar(0.95 + -1 * 0.0125 * noise.perlin3(k*p.x, k*p.y + time, k*p.z));
 
     var mid_y = sphere.geometry.vertices[num_vertices / 2].y;
     // IDK #1 - DECIDE WHETHER OR NOT TO MULTIPLY BY EFFECTCONTROLLER.SPEED
-    if (i <= num_vertices / 2 && mid_y <= -0.1) {
+    if (i <= num_vertices / 3 && mid_y <= -0.1) {
       p.z += 0.00025 * effectController.speed;
-      //p.multiplyScalar(0.99);
+      p.multiplyScalar(0.98);
     }
-    else if (i <= num_vertices / 1.75 && mid_y <= -0.2) {
+    else if (i <= num_vertices / 2.6 && mid_y <= -0.45) {
+      p.z += 0.00035 * effectController.speed;
+      p.multiplyScalar(0.97);
+    }
+    else if (i <= num_vertices / 2.4 && mid_y <= -0.6) {
       p.z += 0.00025 * effectController.speed;
-      //p.multiplyScalar(0.98);
+      p.multiplyScalar(0.96);
     }
-    else if (i <= num_vertices / 1.5 && mid_y <= -0.3) {
-      p.z += 0.00025 * effectController.speed;
-      //p.multiplyScalar(0.96);
-    }
-    else if (i <= num_vertices / 1.25 && mid_y <= -0.4) {
-      p.z += 0.00025 * effectController.speed;
-      //p.multiplyScalar(0.92);
-    }
+  
     
     // Deform sphere by "melting" sphere from top-down; reposition vertex
-    if (p.y > -0.8) {
+    if (p.y > -0.8) {   // keep decrementing until it reaches edge of cone
       p.y -= 5 * 1/i * effectController.speed;
-      // p.y -= 7 * 1/i;
-      // IDK #2
-      // p.y -= 7 * 1/i * effectController.speed;
     }
 
     if (i < sphere.geometry.vertices.length / 2) {
@@ -526,10 +522,10 @@ function setupGui() {
         sphere.material.color.setHSL(0.0372, 0.527, 0);
       } else if (id == "mint") {
         effect.material = dripMaterial["drip mint"].m;
-        effect.material.color.setHSL(0.1927, 0.421, 0.502);
+        effect.material.color.setHSL(0.1927, 0.32, 0.502);
       } else if (id == "green tea") {
         effect.material = dripMaterial["drip green tea"].m;
-        effect.material.color.setHSL(0.1961, 0.493, 0.449);
+        effect.material.color.setHSL(0.1961, 0.493, 0.32);
       }
 
       sphere.material = mat.m;
