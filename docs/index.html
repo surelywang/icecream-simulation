@@ -28,12 +28,29 @@
 		<br>
 		<h2>Abstract</h2>
 		<h4>Our Proposal</h4>
-		<p>Some text goes here.</p>
+		<p>Our team desired to create an ice cream melting simulator that incorporated concepts from this course.  We utilized THREE.js and WebGL to construct our simulator.  We built upon basic vertex manipulation techniques to simulate melting while default metaballs were transformed to create drops.  Lastly, we built a GUI that would allow for users to manipulate the texture and melting speed of our ice cream.</p>
 
 		<br>
 
 		<h2>Technical Approach</h2>
-		<h4>Subtitle here</h4>
+		<h4>Implementation</h4>
+		<p>Our original idea for creating an ice cream simulator was to implement mesh to particle and particle to mesh again after each time step of particle manipulation.  We also wanted to add extra toppings and types of ice cream that would react in their own ways to the temperature in the scene.  This proved to be too intensive for the scope and time deadline of the class and we thus decided to scale back a bit.</p>
+		<p>
+		After feedback from the TAs, we decided to focus on just the melting effect.  Instead of mesh to particle and back, using OpenGL and C++, we switched to particles and mesh manipulation in WebGL and THREE.js.
+		</p>
+
+		<p>
+		On our first pass, we got textures mapped to the ice cream sphere and cone and were able to apply a displacement map to both as well.  We also got a simple simulation of particles dripping from the ice cream.
+		</p>
+
+		<p>
+		Moving on from there, we looked into both vertex and shader deformation, settling on a vertex manipulation approach.  For the drops, we discovered metadrops are a really great way simulate the liquid motion we were looking for.  For a nice final touch, we added a gui that would allow the user to switch ice cream flavors and 
+		</p>
+
+		<h4>Problems and Solutions</h4>
+		<p>Getting the drops to match the ice cream scoop.</p>
+
+		<h4>Lessons Learned</h4>
 		<p>Some text goes here.</p>
 
 		<br>
@@ -45,13 +62,42 @@
 		<br>
 
 		<h2>References</h2>
-		<h4>Subtitle here</h4>
-		<p>Some text goes here.</p>
+		<h4>Early Style Influence</h4>
+		<p><a href="https://peeke.nl/simulating-blobs-of-fluid"></a>Simulating Blobs of Fluid by Peeke Kuepers</p>
+
+		<h4>Vertex Manipulation</h4>
+		<p><a href="https://peeke.nl/simulating-blobs-of-fluid"></a>CHANGE LINK</p>
+
+		<h4>Metaballs</h4>
+		<p><a href="https://github.com/mrdoob/three.js/blob/dev/examples/webgl_marchingcubes.html"></a>Marching Cubes Example by mrdoob</p>
+
+		<h4>Gui</h4>
+		<p><a href="https://github.com/dataarts/dat.gui"></a>Dat Gui GitHub</p>
+
+		<h4>Scientific Papers</h4>
+		<p><a href="https://graphics.stanford.edu/courses/cs348c-95-fall/projects/redkey_herman/writeup.html"></a>Particle Melting Inspiration</p>
+
+		<p><a href="https://peeke.nl/simulating-blobs-of-fluid"></a>CHANGE LINK</p>
+
+		<p><a href="https://peeke.nl/simulating-blobs-of-fluid"></a>CHANGE LINK</p>
+
+		<h4>Ice Cream Textures</h4>
+		<p><a href="https://homemadebrand.com/"></a>Homemade Ice Cream</p>
+
+		<p>Natalie's Tumblr</p>
+
+		<p>Kisspng.com</p>
 
 		<br>
 
 		<h2>Team Contribution</h2>
-		<h4>Subtitle here</h4>
+		<h4>Shirley Wang</h4>
+		<p>Some text goes here.</p>
+
+		<h4>Lauren Martini</h4>
+		<p>Some text goes here.</p>
+
+		<h4>Natalie Khamphanah</h4>
 		<p>Some text goes here.</p>
 
 	</div>
