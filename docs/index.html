@@ -7,6 +7,7 @@
 	<meta charset="UTF-8">
 </head>
 
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
 
 <body>
 	<div class="padded top">
@@ -33,10 +34,17 @@
 		<br>
 
 		<h2>Technical Approach</h2>
+		<h4>Background</h4>
+		<p>We strove to create this simulator as there are not many ice cream simulators and we wanted to see if it was possible.  Also the concept of a melting simulator really appealed to us as a group.</p>
+
+		<p>When starting out, we did a lot of research on the chemistry of ice cream, particle simulations, and melting techinques used in graphics.</p>
+
+		<p>SHOULD WE INSERT PICS AND LINKS TO THE BEST ARTICLES WE FOUND?</p>
+
 		<h4>Implementation</h4>
 		<p>Our goal was to cleanly simulate a solid ice cream melting as there are not a ton of realistic ice cream simulators.  We decided to use Javascript and WebGL to push us out of our comfort zones.</p>
 
-		<p>Our original idea for creating an ice cream simulator was to implement mesh to particle and particle to mesh again after each time step of particle manipulation.  We also wanted to add extra toppings and types of ice cream that would react in their own ways to the temperature in the scene.  This proved to be too intensive for the scope and time deadline of the class and we thus decided to scale back a bit.</p>
+		<p>Our original idea for creating an ice cream simulator was to implement mesh to particle and particle to mesh again after each time step of particle manipulation.  In addition, we planned to incorporate the actual chemistry and food science of ice cream and how it melts under different conditions.  We also wanted to add extra toppings and types of ice cream that would react in their own ways to the temperature in the scene.  This proved to be too intensive for the scope and time deadline of the class and we thus decided to scale back a bit.</p>
 		<p>
 		After feedback from the TAs, we decided to focus on just the melting effect.  Instead of mesh to particle and back, using OpenGL and C++, we switched to particles and mesh manipulation in WebGL and THREE.js.
 		</p>
@@ -49,8 +57,29 @@
 		Moving on from there, we looked into both vertex and shader deformation, settling on a vertex manipulation approach.  For the drops, we discovered metadrops are a really great way simulate the liquid motion we were looking for.  For a nice final touch, we added a gui that would allow the user to switch ice cream flavors and speed of the ice cream drops.
 		</p>
 
+		<h4>Vertex Manipulation</h4>
+		<p>INSERT GIF OR VIDEO</p>
+
+		<p></p>
+
+		<h4>Metaballs</h4>
+		<img src="images/repeatingDrop.gif"/>
+		<p>
+		Metaballs are created in THREE.js using MarchingCubes.js.  These objects are organic spheres that interact when close to each other by combining together fluidly.  The spheres used to make it are changed in opacity overtime to simulate the sphere changing in shape and space.
+		</p>
+
+		<p>Three dimensional metaballs formulas:</p>
+
+		<p>ADD THESE FROM WIKI</p>
+
+		<h4>GUI</h4>
+		<p>INSERT GIF OR VIDEO</p>
+
+		<p></p>
+
 		<h4>Problems and Solutions</h4>
 		<p>Getting the drops to match the ice cream scoop.</p>
+		<p>Getting the drips to correctly fall: a major rehaul in calculation of metaball creation and updating had to be done to get the correct look.  To get them to move correctly, we had to create arrays of previous locations that would be updated in each pass so that the next time step would be based on the previous and the next one on that step and so on.  Also, figuring out how to calculate the x position to spread nicely across the top of the metaball effect frame instead of just quickly flashing back and forth.</p>
 
 		<h4>Lessons Learned</h4>
 		<p>Some text goes here.</p>
@@ -84,9 +113,9 @@
 		<p><a href="https://peeke.nl/simulating-blobs-of-fluid"></a>CHANGE LINK</p>
 
 		<h4>Ice Cream Textures</h4>
-		<p><a href="https://homemadebrand.com/"></a>Homemade Ice Cream</p>
+		<p><a href="https://homemadebrand.com/"></a>CHANGE LINK</p>
 
-		<p>Natalie's Tumblr</p>
+		<p>Natalie's Tumblr????</p>
 
 		<p>Kisspng.com</p>
 
@@ -97,7 +126,9 @@
 		<p>Some text goes here.</p>
 
 		<h4>Lauren Martini</h4>
-		<p>Some text goes here.</p>
+		<p>Up to the milestone, I worked on trying to get vertex manipulation to work but it ended up pulling down the whole sphere instead of just vertices.</p>
+
+		<p>Moving on from that, my main contribution was transforming metaballs from their default form in THREE.js to a drip effect.  I started with the MarchingCubes.js made by mrdoob and manipulated the metaballs generated from that to create dripping ice cream.</p>
 
 		<h4>Natalie Khamphanah</h4>
 		<p>Some text goes here.</p>
