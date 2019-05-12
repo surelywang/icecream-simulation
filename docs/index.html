@@ -29,51 +29,52 @@
 		<br>
 		<h2>Abstract</h2>
 		<h4>Our Proposal</h4>
-		<p>Our team desired to create an ice cream melting simulator that incorporated concepts from this course.  We utilized THREE.js and WebGL to construct our simulator.  We built upon basic vertex manipulation techniques to simulate a melting scoop while default metaballs were transformed to create drops.  Texture mapping was used to add dimension and more realism to the ice cream simulated.  Lastly, we built a GUI that would allow for users to manipulate the texture and melting speed of our ice cream.</p>
+		<p>Our team desired to create an ice cream melting simulator that incorporated concepts from this course, such as texture mapping, shaders, and mesh manipulation.  We utilized WebGL and a complementary library, THREE.js, to construct our simulator.  We built upon vertex manipulation techniques to simulate a melting scoop, while metaballs were transformed to create a dripping effect.  Texture mapping was used to add dimension and more realism to the ice cream simulated.  Lastly, we built a GUI that would allow for users to manipulate the texture of the ice cream by toggling between different flavors and control the melting speed of our ice cream.</p>
 
 		<br>
 
 		<h2>Technical Approach</h2>
-		<h4>Background</h4>
-		<p>We strove to create this simulator as there are not many ice cream simulators and we wanted to see if it was possible.  Also, the concept of a melting simulator really appealed to us as a group.</p>
+		<h3>Background</h3>
+		<p>A prominent motivation to create a simulator was that there are not many melting simulators, let alone ones of ice cream. We wanted to challenge ourselves and create our own melting simulator and experiment with texture mappings. A fun fact is that we all really love ice cream, so we thought it'd be a great outlet to expand on our favorite dessert!</p>
 
-		<p>When starting out, we did a lot of research on the chemistry of ice cream, particle simulations, and melting techinques used in graphics.</p>
+		<h3>Brainstorming</h3>
+		<p>During our brainstorming stage, we had an abundance of creative ideas. We did a lot of research on the chemistry of ice cream, particle simulations, and melting techinques used in graphics. A few of the resources we analyzed during our brainstorming stage are listed below.</p>
 
-		<p>Chemistry of Ice Cream:</p>
+		<p><b>Chemistry of Ice Cream:</b></p>
 		<img src="images/Ice-Cream-Chemistry.png"/>
-
-		<p><a href="https://sites.psu.edu/siowfa15/2015/09/18/does-the-flavor-of-ice-cream-affect-the-time-it-takes-to-melt/"></a>Flavor of Ice Cream Effect on Melting Rate</p>
-		
-		<p><a href="https://www.sciencedirect.com/science/article/pii/S0022030204731355"></a>Ice Cream Structural Elements that Affect Melting Rate and Hardness</p>
+		<p><a href="https://sites.psu.edu/siowfa15/2015/09/18/does-the-flavor-of-ice-cream-affect-the-time-it-takes-to-melt/">Flavor of Ice Cream Effect on Melting Rate</a></p>
+		<p><a href="https://www.sciencedirect.com/science/article/pii/S0022030204731355">Ice Cream Structural Elements that Affect Melting Rate and Hardness</a></p>
 
 		<p>Melting Concepts and Guides:</p>
+		<p><a href="https://drive.google.com/file/d/11b4j2SbBc9pBCd87enbFUKcAajMG0Ker/view">Melting and Flowing</a></p>
+		<p><a href="https://hal.archives-ouvertes.fr/hal-01549291/document">Numerical Model of Melting, Liquid Migration and Deformation</a></p>
 
-		<p><a href="https://drive.google.com/file/d/11b4j2SbBc9pBCd87enbFUKcAajMG0Ker/view"></a>Melting and Flowing</p>
-
-		<p><a href="https://hal.archives-ouvertes.fr/hal-01549291/document"></a>Numerical Model of Melting, Liquid Migration and Deformation</p>
 		
 		<h4>Implementation</h4>
 		<p>Our goal was to cleanly simulate a solid ice cream melting as there are not a ton of realistic ice cream simulators.  We decided to use Javascript and WebGL to push us out of our comfort zones.</p>
 
-		<p>Our original idea for creating an ice cream simulator was to implement mesh to particle and particle to mesh again after each time step of particle manipulation.  In addition, we planned to incorporate the actual chemistry and food science of ice cream and how it melts under different conditions.  We also wanted to add extra toppings and types of ice cream that would react in their own ways to the temperature in the scene.  This proved to be too intensive for the scope and deadline of the class, and we thus decided to scale back a bit.</p>
-		<p>
-		After feedback from the TAs, we decided to focus on just the melting effect.  Instead of mesh to particle and back, using OpenGL and C++, we switched to particles and mesh manipulation in WebGL and THREE.js.
+		<p>Our original idea for creating an ice cream simulator was to implement a particle system using C++ and OpenGL, in which small spherical particles would blend and condense to form a large scoop of ice cream. Overtime, the particles would move such that some would cave inwards into the sphere, while others would drip off onto the cone and onto the ground.  We wanted to create our own ice cream meshes and integrate the chemistry of ice cream along with an element of heat, such that the ice cream would melt or distort according to the physics of its surrounding environment. Additionally, we planned to add extra objects into the scene, such as toppings, which would also melt under the effects of heat. This proved to be too intensive for the scope and deadline of the class, and we thus decided to scale back a bit.  After feedback from our TA, we toned down our goals list and redirected our focus to solely melting a scoop of ice cream artistically.  </p>
+
+		<h3>Milestone</h3>
+
+		<p>During our first implementation, we attempted to create a particle system, in which smaller spherical meshes would blend and makeup a larger sphere mesh - the ice cream scoop.  On our first pass, we got textures mapped to the ice cream sphere and cone and were able to apply a displacement map to both as well.  We also got a simple simulation of particles dripping from the ice cream.</p>
+
+		<img src="https://drive.google.com/open?id=1uvfuLTKb1cXsMYK9ynPt9s7Cb6OlISLC">
+
+		<p>However, we struggled a lot with sketching out how to organize the different nuances of the particles - for instance, how to mathematically determine and delegate which particles would move in what direction, and at which point in time. This approach grew to be more complicated than we anticipated. After showing our implementation to a TA and discussing future directions, we decided to modulate this overall melting task by breaking it down into two components.</p>
+
+		<h3>Final Implementation</h3>
+
+		<p>Moving forward, we worked with the two components: 1.) Illustrating an ice cream scoop melting by applying vertex manipulation on a spherical mesh and 2.) Simulating the dripping effect by using a metaball system, which is esssentially a particle system in which spherical particles blend together into one mesh when they're X distance close to each other.</p>
+
+		<p>To achieve these goals, we researched into both vertex and shader deformation, metaballs, and how to create a GUI.  Originally, we wanted to create our own GLSL shader that would not only apply a Blinn-Phong texture over the objects in the scene, but also distort the vertices over time. However, we struggled a lot with the syntax in importing GLSL into the Javascript files we had. Alternatively, we moved forward by creating a function that would distort the vertices of the mesh overtime. For the dripping, we discovered that metadrops are a really great way to simulate the liquid motion we were looking for.  For a nice final touch, we integrated a user-interactive experience by creating a GUI that would allow the user to toggle between ice cream flavors and control the melting rate of the scoop.
 		</p>
 
-		<p>
-		On our first pass, we got textures mapped to the ice cream sphere and cone and were able to apply a displacement map to both as well.  We also got a simple simulation of particles dripping from the ice cream.
-		</p>
+		<h3>Vertex Manipulation</h3>
+		<img src="https://drive.google.com/open?id=15HBFNsVXgf05E7CbcbTc-6V8Qt_v5YLP">
 
-		<p>
-		Moving on from there, we looked into both vertex and shader deformation, settling on a vertex manipulation approach.  For the drops, we discovered metadrops are a really great way to simulate the liquid motion we were looking for.  For a nice final touch, we added a GUI that would allow the user to switch ice cream flavors and change the speed of the ice cream scoop and drops.
-		</p>
 
-		<h4>Vertex Manipulation</h4>
-		<p>INSERT GIF OR VIDEO</p>
-
-		<p></p>
-
-		<h4>Metaballs</h4>
+		<h3>Metaballs</h3>
 		<img src="images/repeatingDrop.gif"/>
 		<p>
 		Metaballs are created in THREE.js using MarchingCubes.js.  Metaballs are organic spheres that interact when close to each other by combining together fluidly.  The spheres used to make them are changed in opacity overtime to simulate the sphere changing in shape and space.  And the Marching Cubes algorithm was originally created in 1987 by Lorensen and Cline to create a mesh from an isosurface.
@@ -106,48 +107,19 @@
 
 		<h2>Results</h2>
 		<br>
-		<iframe src="../src/main.html" height="550" width="825"></iframe>
+		<iframe src="https://drive.google.com/open?id=1DvwpXxMLoeTlmAvUUIZRU8NJn41RzLWQ" height="550" width="825"></iframe>
 		<h4>Subtitle here</h4>
 		<p>Some text goes here.</p>
 
 		<br>
 
-		<h2>References</h2>
-		<h4>Inspiration</h4>
-		<p><a href="https://www.youtube.com/watch?v=bnH_wiaF4sQ"></a>Time Lapse of Melting Ice Cream</p>
-		
-		<h4>Early Style Influence</h4>
-		<p><a href="https://peeke.nl/simulating-blobs-of-fluid"></a>Simulating Blobs of Fluid by Peeke Kuepers</p>
-
-		<h4>Vertex Manipulation</h4>
-		<p><a href="https://peeke.nl/simulating-blobs-of-fluid"></a>CHANGE LINK</p>
-
-		<h4>Metaballs</h4>
-		<p><a href="https://github.com/mrdoob/three.js/blob/dev/examples/webgl_marchingcubes.html"></a>Marching Cubes Example by mrdoob</p>
-
-		<h4>Gui</h4>
-		<p><a href="https://github.com/dataarts/dat.gui"></a>Dat Gui GitHub</p>
-
-		<h4>Scientific Papers</h4>
-		<p><a href="https://graphics.stanford.edu/courses/cs348c-95-fall/projects/redkey_herman/writeup.html"></a>Particle Melting Inspiration</p>
-
-		<p><a href="https://pdfs.semanticscholar.org/d92f/735b0773b4e697e7e72798eccae2f647acd6.pdf"></a>Marching Cubes Background</p>
-
-		<p><a href="https://peeke.nl/simulating-blobs-of-fluid"></a>CHANGE LINK</p>
-
-		<h4>Ice Cream Textures and Graphics</h4>
-		<p><a href="https://www.compoundchem.com/2015/07/14/ice-cream/"></a>Chemistry of Ice Cream Infographic</p>
-		<p><a href="https://creativecommons.org/licenses/by-nc/3.0/us/"></a>Creative Commons License for Chemistry of Ice Cream Infographic</p>
-		
-		<p>Natalie's Tumblr????</p>
-
-		<p>Kisspng.com</p>
-
-		<br>
-
 		<h2>Team Contribution</h2>
 		<h4>Shirley Wang</h4>
-		<p>Some text goes here.</p>
+		<p>I helped research a lot of articles during our brainstorming stage, most of them focusing around concepts of fluid simulation, such as articles about Navier Stokes, or simple implementations of fluid simulation using OpenGL.</p>
+
+		<p>Once we were set on the melting simulation, I helped implement many parts of the milestone effort, such as mesh generation, texture mapping/shading and creating the particle system. I struggled a lot with solidifying a set structure for the particle interaction, but was able to properly apply textures, such that at first glance, the scene visibly contains an ice cream object.</p>
+
+		<p>Moving forward up to our final implementation, I worked on the vertex manipulation of the scoop from scratch. This effort was achieved through texture mapping and vertex displacement of a spherical mesh.</p>
 
 		<h4>Lauren Martini</h4>
 		<p>Up to the milestone, I worked on trying to get vertex manipulation to work but it ended up pulling down the whole sphere instead of just vertices.</p>
@@ -156,6 +128,42 @@
 
 		<h4>Natalie Khamphanah</h4>
 		<p>Some text goes here.</p>
+
+
+
+		<br>
+
+		<h2>References</h2>
+		<h4>Inspiration</h4>
+		<p><a href="https://www.youtube.com/watch?v=bnH_wiaF4sQ">Time Lapse of Melting Ice Cream</a></p>
+		
+		<h4>Early Style Influence</h4>
+		<p><a href="https://peeke.nl/simulating-blobs-of-fluid">Simulating Blobs of Fluid by Peeke Kuepers</a></p>
+
+		<h4>Vertex Manipulation</h4>
+		<p><a href="https://peeke.nl/simulating-blobs-of-fluid">CHANGE LINK</a></p>
+
+		<h4>Metaballs</h4>
+		<p><a href="https://github.com/mrdoob/three.js/blob/dev/examples/webgl_marchingcubes.html">Marching Cubes Example by mrdoob</a></p>
+
+		<h4>Gui</h4>
+		<p><a href="https://github.com/dataarts/dat.gui">Dat Gui GitHub</a></p>
+
+		<h4>Scientific Papers</h4>
+		<p><a href="https://graphics.stanford.edu/courses/cs348c-95-fall/projects/redkey_herman/writeup.html">Particle Melting Inspiration</a></p>
+
+		<p><a href="https://pdfs.semanticscholar.org/d92f/735b0773b4e697e7e72798eccae2f647acd6.pdf">Marching Cubes Background</a></p>
+
+		<p><a href="https://peeke.nl/simulating-blobs-of-fluid"></a>CHANGE LINK</p>
+
+		<h4>Ice Cream Textures and Graphics</h4>
+		<p><a href="https://www.compoundchem.com/2015/07/14/ice-cream/">Chemistry of Ice Cream Infographic</a></p>
+		<p><a href="https://creativecommons.org/licenses/by-nc/3.0/us/">Creative Commons License for Chemistry of Ice Cream Infographic</a></p>
+		
+		<p>Natalie's Tumblr????</p>
+
+		<p>Kisspng.com</p>
+
 
 	</div>
 </body>
