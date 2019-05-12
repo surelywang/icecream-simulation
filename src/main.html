@@ -23,6 +23,12 @@
 			color: #ff0080;
 			font-weight: bold;
 		}
+    #gui {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      z-index: 10;
+    }
 	</style>
 </head>
 
@@ -33,7 +39,7 @@
 <script src="../build/three.js"></script>
 <script src="js/WebGL.js"></script>
 <script src="js/perlin.js"></script>
-<script type="text/javascript" src="js/dat.gui.min.js"></script>
+<div id="gui"><script type="text/javascript" src="js/dat.gui.min.js"></script></div>
 <script src="js/MarchingCubes.js"></script>
 
 <script type="text/javascript" id="mainCode">
@@ -571,7 +577,10 @@ function setupGui() {
   };
 
     var flavors, temp;
-    var gui = new dat.GUI();
+    var gui = new dat.GUI({ autoPlace: false });
+    var customContainer = document.getElementById('gui');
+    customContainer.appendChild(gui.domElement);
+
     flavors = gui.addFolder('Ice Cream Flavors');
     for ( var m in dropMaterial ) {
       effectController[ m ] = createHandler( m );
