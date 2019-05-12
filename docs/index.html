@@ -35,7 +35,7 @@
 
 		<h2>Technical Approach</h2>
 		<h4>Background</h4>
-		<p>We strove to create this simulator as there are not many ice cream simulators and we wanted to see if it was possible.  Also the concept of a melting simulator really appealed to us as a group.</p>
+		<p>We strove to create this simulator as there are not many ice cream simulators and we wanted to see if it was possible.  Also, the concept of a melting simulator really appealed to us as a group.</p>
 
 		<p>When starting out, we did a lot of research on the chemistry of ice cream, particle simulations, and melting techinques used in graphics.</p>
 
@@ -55,7 +55,7 @@
 		<h4>Implementation</h4>
 		<p>Our goal was to cleanly simulate a solid ice cream melting as there are not a ton of realistic ice cream simulators.  We decided to use Javascript and WebGL to push us out of our comfort zones.</p>
 
-		<p>Our original idea for creating an ice cream simulator was to implement mesh to particle and particle to mesh again after each time step of particle manipulation.  In addition, we planned to incorporate the actual chemistry and food science of ice cream and how it melts under different conditions.  We also wanted to add extra toppings and types of ice cream that would react in their own ways to the temperature in the scene.  This proved to be too intensive for the scope and time deadline of the class and we thus decided to scale back a bit.</p>
+		<p>Our original idea for creating an ice cream simulator was to implement mesh to particle and particle to mesh again after each time step of particle manipulation.  In addition, we planned to incorporate the actual chemistry and food science of ice cream and how it melts under different conditions.  We also wanted to add extra toppings and types of ice cream that would react in their own ways to the temperature in the scene.  This proved to be too intensive for the scope and deadline of the class, and we thus decided to scale back a bit.</p>
 		<p>
 		After feedback from the TAs, we decided to focus on just the melting effect.  Instead of mesh to particle and back, using OpenGL and C++, we switched to particles and mesh manipulation in WebGL and THREE.js.
 		</p>
@@ -65,7 +65,7 @@
 		</p>
 
 		<p>
-		Moving on from there, we looked into both vertex and shader deformation, settling on a vertex manipulation approach.  For the drops, we discovered metadrops are a really great way simulate the liquid motion we were looking for.  For a nice final touch, we added a gui that would allow the user to switch ice cream flavors and speed of the ice cream drops.
+		Moving on from there, we looked into both vertex and shader deformation, settling on a vertex manipulation approach.  For the drops, we discovered metadrops are a really great way to simulate the liquid motion we were looking for.  For a nice final touch, we added a GUI that would allow the user to switch ice cream flavors and change the speed of the ice cream scoop and drops.
 		</p>
 
 		<h4>Vertex Manipulation</h4>
@@ -105,6 +105,8 @@
 		<br>
 
 		<h2>Results</h2>
+		<br>
+		<iframe src="../src/main.html" height="550" width="825"></iframe>
 		<h4>Subtitle here</h4>
 		<p>Some text goes here.</p>
 
