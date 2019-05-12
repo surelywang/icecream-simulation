@@ -39,8 +39,19 @@
 
 		<p>When starting out, we did a lot of research on the chemistry of ice cream, particle simulations, and melting techinques used in graphics.</p>
 
-		<p>SHOULD WE INSERT PICS AND LINKS TO THE BEST ARTICLES WE FOUND?</p>
+		<p>Chemistry of Ice Cream:</p>
+		<img src="images/Ice-Cream-Chemistry.png"/>
 
+		<p><a href="https://sites.psu.edu/siowfa15/2015/09/18/does-the-flavor-of-ice-cream-affect-the-time-it-takes-to-melt/"></a>Flavor of Ice Cream Effect on Melting Rate</p>
+		
+		<p><a href="https://www.sciencedirect.com/science/article/pii/S0022030204731355"></a>Ice Cream Structural Elements that Affect Melting Rate and Hardness</p>
+
+		<p>Melting Concepts and Guides:</p>
+
+		<p><a href="https://drive.google.com/file/d/11b4j2SbBc9pBCd87enbFUKcAajMG0Ker/view"></a>Melting and Flowing</p>
+
+		<p><a href="https://hal.archives-ouvertes.fr/hal-01549291/document"></a>Numerical Model of Melting, Liquid Migration and Deformation</p>
+		
 		<h4>Implementation</h4>
 		<p>Our goal was to cleanly simulate a solid ice cream melting as there are not a ton of realistic ice cream simulators.  We decided to use Javascript and WebGL to push us out of our comfort zones.</p>
 
@@ -65,12 +76,19 @@
 		<h4>Metaballs</h4>
 		<img src="images/repeatingDrop.gif"/>
 		<p>
-		Metaballs are created in THREE.js using MarchingCubes.js.  These objects are organic spheres that interact when close to each other by combining together fluidly.  The spheres used to make it are changed in opacity overtime to simulate the sphere changing in shape and space.
+		Metaballs are created in THREE.js using MarchingCubes.js.  Metaballs are organic spheres that interact when close to each other by combining together fluidly.  The spheres used to make them are changed in opacity overtime to simulate the sphere changing in shape and space.  And the Marching Cubes algorithm was originally created in 1987 by Lorensen and Cline to create a mesh from an isosurface.
 		</p>
 
-		<p>Three dimensional metaballs formulas:</p>
+		<p>Three dimensional metaballs formula (from Wikipedia):</p>
+		<img src="images/metaballFormula.JPEG"/>
 
-		<p>ADD THESE FROM WIKI</p>
+		<p>The above is expenisve to compute but the most common one used to create metaballs.</p>
+
+		<p>The basic structure of metaballs had the right liquidly look for ice cream drops.  However, they do not act like dropping liquid by default.  There is no tracking of the previous y to calculate the new position which is what is needed to create the drops we were looking for.</p>
+
+		<p>Thus some work needed to be done to transform the standard metaballs to ice cream drops.  We changed the sinusoidal functions to update x, y, and z to be one that calculated the new y position from the former based on time.  We created previous arrays to store the x, y, and z values for each blob or drop in the metaball.  At start, these array were intialized to default values for x, y, and z.  With drops, x was generated randomly using Math.random() to ensure they were spread out across the cone more organically.  The z position never changed and could stay at zero.  Y was the most important coordinate to update and started out at 1, which was the upper bound of the metaball effect generator.</p>
+
+		<p>Each update step after the first, y was updated by a random value between 0 and 0.5 multiplied by time.  If y was below 0, it was just -0.5 * time to create a melting effect along the ground plane of the simulator.</p>
 
 		<h4>GUI</h4>
 		<p>INSERT GIF OR VIDEO</p>
@@ -93,6 +111,9 @@
 		<br>
 
 		<h2>References</h2>
+		<h4>Inspiration</h4>
+		<p><a href="https://www.youtube.com/watch?v=bnH_wiaF4sQ"></a>Time Lapse of Melting Ice Cream</p>
+		
 		<h4>Early Style Influence</h4>
 		<p><a href="https://peeke.nl/simulating-blobs-of-fluid"></a>Simulating Blobs of Fluid by Peeke Kuepers</p>
 
@@ -108,13 +129,14 @@
 		<h4>Scientific Papers</h4>
 		<p><a href="https://graphics.stanford.edu/courses/cs348c-95-fall/projects/redkey_herman/writeup.html"></a>Particle Melting Inspiration</p>
 
-		<p><a href="https://peeke.nl/simulating-blobs-of-fluid"></a>CHANGE LINK</p>
+		<p><a href="https://pdfs.semanticscholar.org/d92f/735b0773b4e697e7e72798eccae2f647acd6.pdf"></a>Marching Cubes Background</p>
 
 		<p><a href="https://peeke.nl/simulating-blobs-of-fluid"></a>CHANGE LINK</p>
 
-		<h4>Ice Cream Textures</h4>
-		<p><a href="https://homemadebrand.com/"></a>CHANGE LINK</p>
-
+		<h4>Ice Cream Textures and Graphics</h4>
+		<p><a href="https://www.compoundchem.com/2015/07/14/ice-cream/"></a>Chemistry of Ice Cream Infographic</p>
+		<p><a href="https://creativecommons.org/licenses/by-nc/3.0/us/"></a>Creative Commons License for Chemistry of Ice Cream Infographic</p>
+		
 		<p>Natalie's Tumblr????</p>
 
 		<p>Kisspng.com</p>
