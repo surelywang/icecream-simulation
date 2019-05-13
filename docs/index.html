@@ -115,7 +115,7 @@
 
 		<h3>Problems and Solutions</h3>
 		<p>1. Simulating the scoop mesh to melt realistically. At the point of our final implementation, the scoop mesh distorts such that its vertices displace downwards and inwards on the top. However, by the presentation day, we still struggled to distort the mesh such that the vertices on the top would cave in/downwards along its normal. This method would have eliminated the awkward vertically-diminishing sphere that exists at the moment. We weren't able to figure out how to integrate this but would definitely hope to apply a lot of refinements to this process in future iterations!</p>
-		<p>2. Getting the drops to match the ice cream scoop.</p>
+		<p>2. Getting the drops to match the ice cream scoop. For an unknown reason, when applying the ice cream scoop textures to the drips, the drips would appear black. The only texture that seemed to work was the green tea ice cream texture. Then, there were issues with trying to change the color of this texture, so the drip materials were changed to lambert materials with no texturing. This meant creating separate materials for the drips and adjusting the color and hsl values.</p>
 		<p>3. Getting the drips to correctly fall: a major rehaul in calculation of metaball creation and updating had to be done to get the correct look.  To get them to move correctly, we had to create arrays of previous locations that would be updated in each pass so that the next time step would be based on the previous and the next one on that step and so on.  Also, figuring out how to calculate the x position to spread nicely across the top of the metaball effect frame instead of just quickly flashing back and forth.</p>
 
 
@@ -131,10 +131,10 @@
 		<h2>Results</h2>
 		<br>
 		<iframe src="../src/main.html" height="550" width="825"></iframe>
-		<h4>Subtitle here</h4>
-		<p>Some text goes here.</p>
+		<!-- <h4>Subtitle here</h4>
+		<p>Some text goes here.</p> -->
 
-		<br>
+		<br><br>
 
 		<h2>Team Contribution</h2>
 		<h4>1. Shirley Wang</h4>
@@ -184,10 +184,8 @@
 		<h4>Ice Cream Textures and Graphics</h4>
 		<p><a href="https://www.compoundchem.com/2015/07/14/ice-cream/">Chemistry of Ice Cream Infographic</a></p>
 		<p><a href="https://creativecommons.org/licenses/by-nc/3.0/us/">Creative Commons License for Chemistry of Ice Cream Infographic</a></p>
-		
-		<p>Natalie's Tumblr????</p>
 
-		<p>Kisspng.com</p>
+		<!-- <p>Kisspng.com</p> -->
 
 
 	</div>
