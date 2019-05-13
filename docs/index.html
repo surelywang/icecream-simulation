@@ -40,20 +40,11 @@
 		<p>A prominent motivation to create a simulator was that there are not many melting simulators, let alone ones of ice cream. We wanted to challenge ourselves and create our own melting simulator and experiment with texture mappings. A fun fact is that we all really love ice cream, so we thought it'd be a great outlet to expand on our favorite dessert!</p>
 
 		<h3>Brainstorming</h3>
-		<p>During our brainstorming stage, we had an abundance of creative ideas. We did a lot of research on the chemistry of ice cream, particle simulations, and melting techinques used in graphics. A few of the resources we analyzed during our brainstorming stage are listed below.</p>
+		<p>During our brainstorming stage, we had an abundance of creative ideas. We did a lot of research on the chemistry of ice cream, particle simulations, and melting techinques used in graphics. A few of the resources we analyzed during our brainstorming stage can be accessed <a href="https://docs.google.com/document/d/1GrTEXeZ3xuSCu1Cxp58941WGej9qJw9_C8xdBoyyMoc/edit?usp=sharing">here</a>.
 
-		<p><b>Chemistry of Ice Cream:</b></p>
-		<img src="images/Ice-Cream-Chemistry.png"/>
-		<p><a href="https://sites.psu.edu/siowfa15/2015/09/18/does-the-flavor-of-ice-cream-affect-the-time-it-takes-to-melt/">Flavor of Ice Cream Effect on Melting Rate</a></p>
-		<p><a href="https://www.sciencedirect.com/science/article/pii/S0022030204731355">Ice Cream Structural Elements that Affect Melting Rate and Hardness</a></p>
-
-		<p><b>Melting Concepts and Guides:</b></p>
-		<p><a href="https://drive.google.com/file/d/11b4j2SbBc9pBCd87enbFUKcAajMG0Ker/view">Melting and Flowing</a></p>
-		<p><a href="https://hal.archives-ouvertes.fr/hal-01549291/document">Numerical Model of Melting, Liquid Migration and Deformation</a></p>
-
-		
+	
 		<h4>Implementation</h4>
-		<p>Our goal was to cleanly simulate a solid ice cream melting as there are not a ton of realistic ice cream simulators.  We decided to use Javascript and WebGL to push us out of our comfort zones.</p>
+		<p>Our goal was to cleanly simulate a solid ice cream melting as there are not a ton of realistic ice cream simulators.  We decided to use Javascript and WebGL to push ourselves out of our comfort zones.</p>
 
 		<p>Our original idea for creating an ice cream simulator was to implement a particle system using C++ and OpenGL, in which small spherical particles would blend and condense to form a large scoop of ice cream. Overtime, the particles would move such that some would cave inwards into the sphere, while others would drip off onto the cone and onto the ground.  We wanted to create our own ice cream meshes and integrate the chemistry of ice cream along with an element of heat, such that the ice cream would melt or distort according to the physics of its surrounding environment. Additionally, we planned to add extra objects into the scene, such as toppings, which would also melt under the effects of heat. This proved to be too intensive for the scope and deadline of the class, and we thus decided to scale back a bit.  After feedback from our TA, we toned down our goals list and redirected our focus to solely melting a scoop of ice cream artistically.  </p>
 
@@ -72,14 +63,16 @@
 		<p>To achieve these goals, we researched into both vertex and shader deformation, metaballs, and how to create a GUI.  Originally, we wanted to create our own GLSL shader that would not only apply a Blinn-Phong texture over the objects in the scene, but also distort the vertices over time. However, we struggled a lot with the syntax in importing GLSL into the Javascript files we had. Alternatively, we moved forward by creating a function that would distort the vertices of the mesh overtime. For the dripping, we discovered that metadrops are a really great way to simulate the liquid motion we were looking for.  For a nice final touch, we integrated a user-interactive experience by creating a GUI that would allow the user to toggle between ice cream flavors and control the melting rate of the scoop.
 		</p>
 
-		<h4>1. Vertex Manipulation</h4>
+		<h4>Vertex Manipulation</h4>
+		<br>
 		<img src="images/melting.gif">
 		<p>The method of manipulating vertices of a spherical mesh were used to simulate the "melting" motion of an ice cream scoop. Set on a time loop, vertices of the scoop, which is represented by a sphere mesh, are displaced in the -y direction to simulate a downwards slipping motion and in the +z direction to visualize the scoop caving inwards, for a realistic representation of melting dairy. Light downscaling of the mesh are integrated to ensure that the size of the ice cream scoop decreases overtime. Also, when exposed to heat, we observed in-person that the top of the scoop melts first and faster, as opposed to the bottom of the object. To ensure this element is implemented, vertices of the top of the mesh melt faster than the bottom of the mesh, in a top-down fashion.M</p>
 
 		<p>Additionally, a Perlin noise function was applied to the sphere mesh. Perlin noise is an algorithm that generates movement similar to white noise and is often used in games or simulations of particles such as smoke. Our design choice in adding this to the cycle of melting was in hopes of adding a subtle touch of life to the ice cream mesh for realism.</p>
 
 
-		<h4>2. Metaballs</h4>
+		<h4>Metaballs</h4>
+		<br>
 		<img src="images/repeatingDrop.gif"/>
 		<p>
 		Metaballs are created in THREE.js using MarchingCubes.js.  Metaballs are organic spheres that interact when close to each other by combining together fluidly.  The spheres used to make them are changed in opacity overtime to simulate the sphere changing in shape and space.  And the Marching Cubes algorithm was originally created in 1987 by Lorensen and Cline to create a mesh from an isosurface.
@@ -96,7 +89,8 @@
 
 		<p>Each update step after the first, y was updated by a random value between 0 and 0.5 multiplied by time.  If y was below 0, it was just -0.5 * time to create a melting effect along the ground plane of the simulator.</p>
 
-		<h4>3. GUI</h4>
+		<h4>GUI</h4>
+		<br>
 		<p>INSERT GIF OR VIDEO</p>
 
 		<p></p>
@@ -131,7 +125,7 @@
 
 		<p>Moving on from that, my main contribution was transforming metaballs from their default form in THREE.js to a drip effect.  I started with the MarchingCubes.js made by mrdoob and manipulated the metaballs generated from that to create dripping ice cream.</p>
 
-		<h43. Natalie Khamphanah</h4>
+		<h4>3.  Natalie Khamphanah</h4>
 		<p>Some text goes here.</p>
 
 
