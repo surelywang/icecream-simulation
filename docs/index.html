@@ -23,7 +23,7 @@
 		 <li class="presentation"><a href="presentation.html"> Presentation </a></li>
 		 <li class="video"><a href="video.html"> Video </a></li>
 		 <li class="github"><a href="https://github.com/surelywang/icecream-simulation"> Github </a></li>
-		 <li class="simulation"><a href""> Our Simulator </a></li>
+		 <li class="simulation"><a href=""> Our Simulator </a></li>
       </ul></center>
     </div>
 
@@ -66,7 +66,7 @@
 		<h4>Vertex Manipulation</h4>
 		<br>
 		<img src="images/melting.gif">
-		<p>The method of manipulating vertices of a spherical mesh were used to simulate the "melting" motion of an ice cream scoop. Set on a time loop, vertices of the scoop, which is represented by a sphere mesh, are displaced in the -y direction to simulate a downwards slipping motion and in the +z direction to visualize the scoop caving inwards, for a realistic representation of melting dairy. Light downscaling of the mesh are integrated to ensure that the size of the ice cream scoop decreases overtime. Also, when exposed to heat, we observed in-person that the top of the scoop melts first and faster, as opposed to the bottom of the object. To ensure this element is implemented, vertices of the top of the mesh melt faster than the bottom of the mesh, in a top-down fashion.M</p>
+		<p>The method of manipulating vertices of a spherical mesh were used to simulate the "melting" motion of an ice cream scoop. Set on a time loop, vertices of the scoop, which is represented by a sphere mesh, are displaced in the -y direction to simulate a downwards slipping motion and in the +z direction to visualize the scoop caving inwards, for a realistic representation of melting dairy. Light downscaling of the mesh are integrated to ensure that the size of the ice cream scoop decreases overtime. Also, when exposed to heat, we observed in-person that the top of the scoop melts first and faster, as opposed to the bottom of the object. To ensure this element is implemented, vertices of the top of the mesh melt faster than the bottom of the mesh, in a top-down fashion.</p>
 
 		<p>Additionally, a Perlin noise function was applied to the sphere mesh. Perlin noise is an algorithm that generates movement similar to white noise and is often used in games or simulations of particles such as smoke. Our design choice in adding this to the cycle of melting was in hopes of adding a subtle touch of life to the ice cream mesh for realism.</p>
 
@@ -91,9 +91,14 @@
 
 		<h4>GUI</h4>
 		<br>
-		<p>INSERT GIF OR VIDEO</p>
+		<img src="images/guiDemo.gif"/>
+		<p>
+		The GUI was created using the dat.GUI library. An "Ice Cream Flavors" menu was created that allows for toggling between 5 different ice cream flavors. This was done by creating a function that identifies the toggled flavor and switches the material of the scoop and drip to different textures and colors. In order to avoid having the scoop and drips to appear desaturated, the HSL values of the materials' colors were adjusted within the funciton.
+		</p>
 
-		<p></p>
+		<p> Originally, we wanted to try and implement a temperature slider that would accurately simulate the melting and dripping of the ice cream according to the type of ice cream flavor and the temperature. However, after realizing the amount of time left and how difficult it would be to implement this, we decided to include a "Speed" slider to the GUI. This still allows the user to play around with the rate at which the scoop and drips fall, but less realistically. With the default speed starting at 0.15, the user is able to change the melting and dripping rate between the values 0 to 5 at 0.05 increments.</p>
+
+		<p>Lastly, an "Another scoop!" button was added that allows the user to restart the simulation. This was done by creating a restart function that removes the current scoop of ice cream and creates a new sphere geometry to represent the new scoop. The default that it resets to is the mint ice cream.</p>
 
 		<h2>Conclusion</h2>
 

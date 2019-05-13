@@ -499,7 +499,6 @@ function setupGui() {
       if (id == "strawberry") {
         effect.material = dripMaterial["drip strawberry"].m;
         effect.material.color.setHSL(0.0372, 0.527, 0.6);
-        //effect.material.color.setHSL(0.2, 0.4, 0.6);
       } else if (id == "chocolate") {
         effect.material = dripMaterial["drip chocolate"].m;
         effect.material.color.setHSL(0.0313, 0.7, 0.2);
@@ -524,7 +523,6 @@ function setupGui() {
       } else if (id == "vanilla") {
         sphere.material.color.setHSL(0.1191, 0.538, 0.673);
       } else if (id == "mint") {
-        // sphere.material.color.setHSL(0.1927, 0.421, 0.702);
         sphere.material.color.setHSL(0.15, 0.375, 0.702);
       } else if (id == "green tea") {
         sphere.material.color.setHSL(0.1961, 0.493, 0.449);
@@ -539,12 +537,8 @@ function setupGui() {
     numBlobs: 5,
     resolution: 28,
     isolation: 80,
-    hue: 0.0372,
-    saturation: 0.527,
-    lightness: 0.784,
 
     restart: function() {
-      // var selectedObject = scene.getObjectByName(sphere);
       scene.remove(sphere);
       selectedObject = scene.getObjectByName(effect);
       scene.remove(effect);
@@ -552,7 +546,6 @@ function setupGui() {
       sphere_geometry = new THREE.SphereGeometry(0.1, 128, 128);
       material = new THREE.MeshNormalMaterial();
       sphere = new THREE.Mesh(sphere_geometry, icemat);
-      // sphere.material.color.setHSL(0.0372, 0.527, 0.784);
       sphere.material.color.setHSL(0.15, 0.375, 0.702);
       sphere.position.y = 1.17;
       sphere.castShadow = true;
@@ -562,7 +555,6 @@ function setupGui() {
       current_material = "drip mint";
 
       effect = new THREE.MarchingCubes(resolution, dripMaterial[ current_material ].m, true, true );
-      // effect.material.color.setHSL(0.0372, 0.527, 0.6);
       effect.material.color.setHSL(0.3, 0.15, 0.52);
       effect.position.set( 0, -0.29, 3 );
       effect.scale.set( 0.4, 0.9, 1 );
@@ -572,8 +564,6 @@ function setupGui() {
 
     },
     
-    dummy: function () {},
-    temperature: 60
   };
 
     var flavors, temp;
@@ -589,7 +579,6 @@ function setupGui() {
     flavors.open();
 
     gui.add(effectController, 'speed', 0, 5, 0.05).name("Speed");
-    // gui.add(effectController, 'temperature', 27, 105, 1).name("Temperature").onChange(changeTemp);
 
     gui.add(effectController, 'restart').name("Another scoop!");
   }
