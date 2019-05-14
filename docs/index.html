@@ -22,8 +22,8 @@
 		 <li class="milestone"><a href="milestone.html"> Milestone </a></li>
 		 <li class="presentation"><a href="presentation.html"> Presentation </a></li>
 		 <li class="video"><a href="video.html"> Video </a></li>
-		 <li class="github"><a href="https://github.com/surelywang/icecream-simulation"> Github </a></li>
-		 <li class="simulation"><a href="../src/main.html"> Our Simulator </a></li>
+		 <li class="github"><a href="https://github.com/surelywang/icecream-simulation"> Github</a></li>
+		 <li class="simulation"><a href="main.html"> Our Simulator </a></li>
       </ul></center>
     </div>
 
@@ -60,15 +60,17 @@
 
 		<p>Moving forward, we worked with the two components: 1.) Illustrating an ice cream scoop melting by applying vertex manipulation on a spherical mesh and 2.) Simulating the dripping effect by using a metaball system, which is esssentially a particle system in which spherical particles blend together into one mesh when they're X distance close to each other.</p>
 
-		<p>To achieve these goals, we researched into both vertex and shader deformation, metaballs, and how to create a GUI.  Originally, we wanted to create our own GLSL shader that would not only apply a Blinn-Phong texture over the objects in the scene, but also distort the vertices over time. However, we struggled a lot with the syntax in importing GLSL into the Javascript files we had. Alternatively, we moved forward by creating a function that would distort the vertices of the mesh overtime. For the dripping, we discovered that metadrops are a really great way to simulate the liquid motion we were looking for.  For a nice final touch, we integrated a user-interactive experience by creating a GUI that would allow the user to toggle between ice cream flavors and control the melting rate of the scoop.
+		<p>To achieve these goals, we researched into both vertex and shader deformation, metaballs, and how to create a GUI.  Originally, we wanted to create our own GLSL shader that would not only apply a Blinn-Phong texture over the objects in the scene, but also distort the vertices over time. However, we struggled a lot with the syntax in importing GLSL into the JavaScript files we had. Alternatively, we moved forward by creating a function that would distort the vertices of the mesh overtime. For the dripping, we discovered that metadrops are a really great way to simulate the liquid motion we were looking for.  For a nice final touch, we integrated a user-interactive experience by creating a GUI that would allow the user to toggle between ice cream flavors and control the melting rate of the scoop.
 		</p>
 
 		<h4>Vertex Manipulation</h4>
 		<br>
 		<img src="images/melting.gif">
-		<p>The method of manipulating vertices of a spherical mesh were used to simulate the "melting" motion of an ice cream scoop. Set on a time loop, vertices of the scoop, which is represented by a sphere mesh, are displaced in the -y direction to simulate a downwards slipping motion and in the +z direction to visualize the scoop caving inwards, for a realistic representation of melting dairy. Light downscaling of the mesh are integrated to ensure that the size of the ice cream scoop decreases overtime. Also, when exposed to heat, we observed in-person that the top of the scoop melts first and faster, as opposed to the bottom of the object. To ensure this element is implemented, vertices of the top of the mesh melt faster than the bottom of the mesh, in a top-down fashion.</p>
+		<p>The method of manipulating vertices of a spherical mesh were used to simulate the "melting" motion of an ice cream scoop. Set on a time loop, vertices of the scoop, represented by a sphere mesh, are <b>displaced</b> in the -y direction to simulate a downwards slipping motion and in the +z direction to visualize the scoop caving inwards, for a realistic representation of melting dairy. To ensure this process is gradual and not all at-once, conditions were set such that for instance, the vertices would only cave inwards in the z-direction if the y-coordinate of that vertex had reached low enough of a boundary.</p>
 
-		<p>Additionally, a Perlin noise function was applied to the sphere mesh. Perlin noise is an algorithm that generates movement similar to white noise and is often used in games or simulations of particles such as smoke. Our design choice in adding this to the cycle of melting was in hopes of adding a subtle touch of life to the ice cream mesh for realism.</p>
+		<p>Additionally, <b>light downscaling</b> of the mesh are integrated to ensure that the size of the ice cream scoop decreases overtime. Also, when exposed to heat, we observed in-person that the top of the scoop melts first and faster, as opposed to the bottom of the object. To ensure this element is implemented, vertices of the top of the mesh melt faster than the bottom of the mesh, in a top-down fashion.</p>
+
+		<p>Additionally, a <b>Perlin noise function</b> was applied to the sphere mesh. Perlin noise is an algorithm that generates movement similar to white noise and is often used in games or simulations of particles such as smoke. Our design choice in adding this to the cycle of melting was in hopes of adding a subtle touch of life to the ice cream mesh for realism.</p>
 
 
 		<h4>Metaballs</h4>
@@ -144,7 +146,7 @@
 
 		<p>Once we were set on the melting simulation, I helped implement many parts of the milestone effort, such as mesh generation, texture mapping/shading and creating the particle system. I struggled a lot with solidifying a set structure for the particle interaction, but was able to properly apply textures, such that at first glance, the scene visibly contains an ice cream object.</p>
 
-		<p>Moving forward up to our final implementation, I worked on the vertex manipulation of the scoop from scratch. This effort was achieved through texture mapping and vertex displacement of a spherical mesh.</p>
+		<p>Moving forward up to our final implementation, I worked on the vertex manipulation of the scoop from scratch. This effort was achieved through texture mapping and vertex displacement of a spherical mesh. I also worked on the second version of our website and made style refinements.</p>
 
 		<h4>2. Lauren Martini</h4>
 		<p>Up to the milestone, I worked on trying to get vertex manipulation to work but it ended up pulling down the whole sphere instead of just vertices.</p>
@@ -168,7 +170,7 @@
 		<p><a href="https://peeke.nl/simulating-blobs-of-fluid">Simulating Blobs of Fluid by Peeke Kuepers</a></p>
 
 		<h4>Vertex Manipulation</h4>
-		<p><a href="https://codepen.io/farisk/pen/vrbzwL">Vertex Manipulation with Perlin Noise</a></p>
+		<p><a href="https://github.com/josephg/noisejs">Perlin Noise Library</a></p>
 
 		<h4>Metaballs</h4>
 		<p><a href="https://github.com/mrdoob/three.js/blob/dev/examples/webgl_marchingcubes.html">Marching Cubes Example by mrdoob</a></p>
@@ -181,13 +183,10 @@
 
 		<p><a href="https://pdfs.semanticscholar.org/d92f/735b0773b4e697e7e72798eccae2f647acd6.pdf">Marching Cubes Background</a></p>
 
-		<!-- <p><a href="https://peeke.nl/simulating-blobs-of-fluid"></a>CHANGE LINK</p> -->
-
 		<h4>Ice Cream Textures and Graphics</h4>
 		<p><a href="https://www.compoundchem.com/2015/07/14/ice-cream/">Chemistry of Ice Cream Infographic</a></p>
 		<p><a href="https://creativecommons.org/licenses/by-nc/3.0/us/">Creative Commons License for Chemistry of Ice Cream Infographic</a></p>
 
-		<!-- <p>Kisspng.com</p> -->
 
 
 	</div>
