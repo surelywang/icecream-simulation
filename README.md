@@ -8,3 +8,6 @@ To run the simulation locally:
    git clone https://github.com/surelywang/icecream-simulation.git
 2. Open up src/main.html in your browser.
 3. Play with the simulator! You can toggle between different textures and melting rates.
+
+Explore our design and development process, as well as the final simulation here:
+https://surelywang.github.io/icecream-simulation/
